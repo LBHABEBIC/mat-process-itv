@@ -2,7 +2,7 @@ import * as router from "next/router";
 import React from "react";
 import { act, create, ReactTestRenderer } from "react-test-renderer";
 import basePath from "../../../../config/basePath";
-import LoadingPage from "../../../../pages/TODO/[processRef]/loading";
+import LoadingPage from "../../../../pages/itv/[processRef]/loading";
 import { databaseSchemaVersion } from "../../../../storage/databaseSchemaVersion";
 import { processStoreNames } from "../../../../storage/ProcessDatabaseSchema";
 import { Storage } from "../../../../storage/Storage";
@@ -263,7 +263,7 @@ it("renders correctly when online", async () => {
             <h1
               className="lbh-heading-h1"
             >
-              TODO
+            Introductory tenancy visit
             </h1>
           </div>
           <h2
@@ -483,8 +483,7 @@ it("renders correctly when offline", async () => {
             <h1
               className="lbh-heading-h1"
             >
-              TODO
-            </h1>
+            Introductory tenancy visit            </h1>
           </div>
           <span
             className="govuk-error-message lbh-error-message"

@@ -150,7 +150,7 @@ it("renders correctly when online", async () => {
                 className="lbh-body"
               >
                 The 
-                TODO
+                Introductory tenancy visit
                  has been saved to your device ready to be sent
                  
                 to your manager for review.
@@ -172,7 +172,7 @@ it("renders correctly when online", async () => {
                 </strong>
                 , please come back to this
                  
-                TODO
+                Introductory tenancy visit
                  from your work tray and click on the ‘Save and submit
                  to manager
                 ’ button below that will become able to be clicked.
@@ -184,7 +184,7 @@ it("renders correctly when online", async () => {
                   You are online
                 </strong>
                 , and can submit this 
-                TODO
+                Introductory tenancy visit
                  
                 to your manager now.
               </p>
@@ -368,7 +368,7 @@ it("renders correctly when offline", async () => {
                 className="lbh-body"
               >
                 The 
-                TODO
+                Introductory tenancy visit
                  has been saved to your device ready to be sent
                  
                 to your manager for review.
@@ -390,7 +390,7 @@ it("renders correctly when offline", async () => {
                 </strong>
                 , please come back to this
                  
-                TODO
+                Introductory tenancy visit
                  from your work tray and click on the ‘Save and submit
                  to manager
                 ’ button below that will become able to be clicked.
