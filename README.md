@@ -66,7 +66,7 @@ We use:
    npm run dev
    ```
 
-1. Navigate to [`http://localhost:3000/TODO`](http://localhost:3000/TODO).
+1. Navigate to [`http://localhost:3000/itv`](http://localhost:3000/itv).
 
 1. Make a change, and see the page hot reload.
 

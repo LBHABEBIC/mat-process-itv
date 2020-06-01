@@ -1,5 +1,5 @@
-# This Dockerfile is part of London Borough of Hackney's TODO process: 
-# https://github.com/LBHackney-IT/mat-process-TODO
+# This Dockerfile is part of London Borough of Hackney's Introductory Tenancy Visit process: 
+# https://github.com/LBHackney-IT/mat-process-itv
 #
 
 # ------------------------------------------------------------------------------
