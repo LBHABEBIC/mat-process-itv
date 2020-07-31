@@ -367,7 +367,7 @@ export const SectionsPage: NextPage = () => {
   return (
     <MainLayout
       title={PageTitles.Sections}
-      heading="Tenancy and Household Check"
+      heading="Introductory Tenancy Visit"
       pausable
     >
       <TenancySummary
