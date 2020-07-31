@@ -17,10 +17,10 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Start,
-  heading: "Start Tenancy and Household Check",
+  heading: "Start Introductory Tenancy Visit",
   step: {
     slug: PageSlugs.Start,
-    //nextSlug: PageSlugs.AboutVisit, // TODO: change to the real next page
+    nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeUnableToEnterSubmit({
         slug: nextSlug as PageSlugs | undefined,
@@ -33,7 +33,7 @@ const step = {
           Component: Heading,
           props: {
             level: HeadingLevels.H2,
-            children: "About Tenancy and Household Check",
+            children: "About Introductory Tenancy Visit",
           },
         })
       ),
