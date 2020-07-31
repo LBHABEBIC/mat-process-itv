@@ -1,4 +1,4 @@
-# This Dockerfile is part of London Borough of Hackney's Introductory Tenancy Visit process: 
+# This Dockerfile is part of London Borough of Hackney's Introductory Tenancy Visit process:
 # https://github.com/LBHackney-IT/mat-process-itv
 #
 
@@ -6,7 +6,7 @@
 # base
 # ------------------------------------------------------------------------------
 
-FROM node:12.16.3-alpine AS base
+FROM node:14.4.0-alpine AS base
 
 RUN apk add --no-cache bash
 
@@ -15,6 +15,7 @@ WORKDIR /app
 ARG ENVIRONMENT_NAME
 ARG PROCESS_NAME
 ARG WORKTRAY_URL
+ARG TENANCY_URL
 ARG DIVERSITY_FORM_URL
 ARG FEEDBACK_FORM_URL
 
@@ -22,6 +23,7 @@ ENV NODE_ENV production
 ENV ENVIRONMENT_NAME ${ENVIRONMENT_NAME}
 ENV PROCESS_NAME ${PROCESS_NAME}
 ENV WORKTRAY_URL ${WORKTRAY_URL}
+ENV TENANCY_URL ${TENANCY_URL}
 ENV DIVERSITY_FORM_URL ${DIVERSITY_FORM_URL}
 ENV FEEDBACK_FORM_URL ${FEEDBACK_FORM_URL}
 

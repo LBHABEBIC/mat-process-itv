@@ -1,14 +1,4 @@
 import {
-  getProcessRef,
-  isClosed,
-  isInManagerReview,
-  makeNextRouterUrls,
-  makeUrlFromSlug,
-  ON_SERVER,
-  ProcessStage,
-  ProgressBar,
-} from "@hackney/mat-process-utils";
-import {
   Button,
   ErrorMessage,
   Heading,
@@ -18,25 +8,32 @@ import {
 import { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { nullAsUndefined } from "null-as-undefined";
 import React, { useMemo, useState } from "react";
 import { useAsync } from "react-async-hook";
-import basePath from "../../../config/basePath";
-import processName from "../../../config/processName";
-import { getMatApiData } from "../../../helpers/getMatApiData";
-import { getProcessApiJwt } from "../../../helpers/getProcessApiJwt";
-import { getProcessStage } from "../../../helpers/getProcessStage";
-import { PageTitle } from "../../../helpers/PageTitle";
-import { repeatingStepSlugs, Slug, stepSlugs } from "../../../helpers/Slug";
-import { useApi } from "../../../helpers/useApi";
-import {
-  useApiWithStorage,
+import ProgressBar from "../../../components/ProgressBar";
+import { TenancySummary } from "../../../components/TenancySummary";
+import useApi from "../../../helpers/api/useApi";
+import useApiWithStorage, {
   UseApiWithStorageReturn,
-} from "../../../helpers/useApiWithStorage";
-import { usePrecacheAll } from "../../../helpers/usePrecacheAll";
-import { MainLayout } from "../../../layouts/MainLayout";
-import { ExternalDatabaseSchema } from "../../../storage/ExternalDatabaseSchema";
+} from "../../../helpers/api/useApiWithStorage";
+import basePath from "../../../helpers/basePath";
+import getMatApiData from "../../../helpers/getMatApiData";
+import getProcessRef from "../../../helpers/getProcessRef";
+import isClient from "../../../helpers/isClient";
+import isClosed from "../../../helpers/isClosed";
+import isManager from "../../../helpers/isManager";
+import isServer from "../../../helpers/isServer";
+import titleCase from "../../../helpers/titleCase";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import usePrecacheAll from "../../../helpers/usePrecacheAll";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import ExternalDatabaseSchema from "../../../storage/ExternalDatabaseSchema";
 import { ProcessJson } from "../../../storage/ProcessDatabaseSchema";
-import { Storage } from "../../../storage/Storage";
+import { ResidentRef } from "../../../storage/ResidentDatabaseSchema";
+import Storage from "../../../storage/Storage";
 
 const useFetchProcessJson = (): {
   loading: boolean;
@@ -44,14 +41,14 @@ const useFetchProcessJson = (): {
   error?: Error;
 } => {
   const router = useRouter();
+
   const processRef = getProcessRef(router);
+
   const processData = useApi<{ processData: ProcessJson }>({
     endpoint: `/v1/processes/${processRef}/processData`,
     jwt: {
       sessionStorageKey:
-        !ON_SERVER && processRef
-          ? `${basePath}/${processRef}:processApiJwt`
-          : undefined,
+        isClient && processRef ? `${processRef}:processApiJwt` : undefined,
     },
     execute: Boolean(processRef),
   });
@@ -73,14 +70,26 @@ const useFetchImages = (
   expectedImageCount: number;
 } => {
   const router = useRouter();
+
   const processRef = getProcessRef(router);
-  const jwt = getProcessApiJwt(processRef);
-  const images = processData
-    ? Storage.getImagesToFetch(processData)
-    : undefined;
+
+  const jwt =
+    isClient && processRef
+      ? nullAsUndefined(sessionStorage.getItem(`${processRef}:processApiJwt`))
+      : undefined;
+
+  let images:
+    | ReturnType<typeof Storage.getImagesToFetch>
+    | undefined = undefined;
+
+  if (processData) {
+    images = Storage.getImagesToFetch(processData);
+  }
+
   const [fetchedImageCount, setFetchedImageCount] = useState(0);
+
   const imageResults = useAsync(async () => {
-    if (ON_SERVER) {
+    if (isServer) {
       return;
     }
 
@@ -98,10 +107,13 @@ const useFetchImages = (
 
     return Promise.all(
       images.map(async ({ id, ext }) => {
-        const response = await fetch(
-          `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}`,
-          { method: "GET" }
-        );
+        const path = `${basePath}/api/v1/processes/${processRef}/images/${id}/${ext}?jwt=${jwt}}`;
+        let response: Response;
+        try {
+          response = await fetch(path, { method: "GET" });
+        } catch (err) {
+          throw new Error(`Fetch failed for ${path}`);
+        }
         const responseBody = await response.text();
 
         let image: { base64Image: string } | undefined = undefined;
@@ -134,7 +146,7 @@ const useFetchImages = (
   }, [processRef, jwt, JSON.stringify(images)]);
 
   return {
-    loading: ON_SERVER || imageResults.loading || !images,
+    loading: isServer || imageResults.loading || !images,
     result: images ? imageResults.result : undefined,
     error: imageResults.error,
     fetchedImageCount,
@@ -151,6 +163,7 @@ const useFetchProcessJsonWithImages = (): {
 } => {
   const processJson = useFetchProcessJson();
   const images = useFetchImages(processJson.result?.processData);
+
   const processJsonWithImages = useMemo(() => {
     let loading = true;
     let error: Error | undefined;
@@ -227,8 +240,11 @@ const useFetchAndStoreProcessJson = (): {
   expectedStepCount: number;
 } => {
   const router = useRouter();
+
   const processRef = getProcessRef(router);
+
   const processJson = useFetchProcessJsonWithImages();
+
   const offlineSync = useAsync(async () => {
     if (
       !processRef ||
@@ -239,6 +255,9 @@ const useFetchAndStoreProcessJson = (): {
       return;
     }
 
+    // The steps still use the hardcoded `processRef`, so we need to also use
+    // it, even though we're using the correct value to fetch from the
+    // backend.
     return Storage.updateProcessData(processRef, processJson.result);
   }, [
     processRef,
@@ -260,11 +279,131 @@ const useFetchAndStoreProcessJson = (): {
   };
 };
 
+const useFetchResidentData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "residents"
+> => {
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+  const data = getMatApiData(processRef);
+
+  return useApiWithStorage({
+    endpoint: "/v1/residents",
+    query: { data },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
+    },
+    execute: Boolean(processRef),
+    parse(data: {
+      results: {
+        contactId: ResidentRef;
+        dateOfBirth: string;
+        fullAddressDisplay: string;
+        fullName: string;
+        relationship: string;
+        responsible: boolean;
+      }[];
+    }) {
+      const fullAddress = data.results[0].fullAddressDisplay;
+      const address = fullAddress
+        .split("\n")
+        .map((line) => titleCase(line.replace("\r", "")));
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const cityAndPostcodeParts = address.pop()!.split(" ");
+
+      const cityAndPostcode = [
+        cityAndPostcodeParts.slice(0, -2).join(" "),
+        `${cityAndPostcodeParts[cityAndPostcodeParts.length - 2]} ${
+          cityAndPostcodeParts[cityAndPostcodeParts.length - 1]
+        }`.toUpperCase(),
+      ];
+
+      address.push(...cityAndPostcode);
+
+      const tenants = data.results
+        .filter((contact) => contact.responsible)
+        .map((contact) => ({
+          id: contact.contactId,
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth),
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
+
+      const householdMembers = data.results
+        .filter((contact) => !contact.responsible)
+        .map((contact) => ({
+          id: contact.contactId,
+          fullName: contact.fullName,
+          dateOfBirth: new Date(contact.dateOfBirth),
+          relationship: contact.relationship || "Not available",
+        }))
+        .sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
+
+      return {
+        address,
+        tenants,
+        householdMembers,
+      };
+    },
+    databaseContext: Storage.ExternalContext,
+    databaseMap: {
+      storeName: "residents",
+      key: processRef,
+    },
+  });
+};
+
+const useFetchTenancyData = (): UseApiWithStorageReturn<
+  ExternalDatabaseSchema,
+  "tenancy"
+> => {
+  const router = useRouter();
+
+  const processRef = getProcessRef(router);
+  const data = getMatApiData(processRef);
+
+  return useApiWithStorage({
+    endpoint: "/v1/tenancies",
+    query: { data },
+    jwt: {
+      sessionStorageKey:
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
+    },
+    execute: Boolean(processRef),
+    parse(data: {
+      results: {
+        tenuretype: string;
+        tenancyStartDate: string;
+        currentBalance: string;
+      };
+    }) {
+      const tenureType = data.results.tenuretype;
+      const tenancyStartDate = data.results.tenancyStartDate;
+      const currentBalance = data.results.currentBalance;
+
+      return {
+        tenureType,
+        startDate: new Date(tenancyStartDate),
+        currentBalance,
+      };
+    },
+    databaseContext: Storage.ExternalContext,
+    databaseMap: {
+      storeName: "tenancy",
+      key: processRef,
+    },
+  });
+};
+
 const useOfficerData = (): UseApiWithStorageReturn<
   ExternalDatabaseSchema,
   "officer"
 > => {
   const router = useRouter();
+
   const processRef = getProcessRef(router);
   const data = getMatApiData(processRef);
 
@@ -273,9 +412,7 @@ const useOfficerData = (): UseApiWithStorageReturn<
     query: { data },
     jwt: {
       sessionStorageKey:
-        !ON_SERVER && processRef
-          ? `${basePath}/${processRef}:matApiJwt`
-          : undefined,
+        isClient && processRef ? `${processRef}:matApiJwt` : undefined,
     },
     execute: Boolean(processRef),
     parse(data: { fullName: string }) {
@@ -292,10 +429,17 @@ const useOfficerData = (): UseApiWithStorageReturn<
 export const LoadingPage: NextPage = () => {
   const router = useRouter();
   const processDataSyncStatus = useFetchAndStoreProcessJson();
+  const residentData = useFetchResidentData();
+  const tenancyData = useFetchTenancyData();
   const officerData = useOfficerData();
   const precacheProcessPages = usePrecacheAll();
 
-  const extraResults = [officerData, precacheProcessPages];
+  const extraResults = [
+    residentData,
+    tenancyData,
+    officerData,
+    precacheProcessPages,
+  ];
 
   const loading =
     processDataSyncStatus.loading ||
@@ -325,23 +469,18 @@ export const LoadingPage: NextPage = () => {
       processDataSyncStatus.completedStepCount) /
     (extraResults.length + processDataSyncStatus.expectedStepCount);
 
-  const processStage = getProcessStage(router) as ProcessStage | undefined;
-  const isInManagerStage = isInManagerReview(processStage);
-  const isInClosedStage = isClosed(processStage);
+  const isInManagerStage = isManager(router);
+  const isInClosedStage = isClosed(router);
 
   const nextSlug = isInManagerStage
-    ? Slug.ManagerReview
+    ? PageSlugs.ManagerReview
     : isInClosedStage
-    ? Slug.ClosedReview
-    : // TODO: Replace with the first step in the process.
-      Slug.Review;
+    ? PageSlugs.ClosedReview
+    : PageSlugs.Outside;
 
-  const { href, as } = makeNextRouterUrls(
+  const { href, as } = urlsForRouter(
     router,
-    makeUrlFromSlug(router, nextSlug, basePath),
-    basePath,
-    stepSlugs,
-    repeatingStepSlugs
+    urlObjectForSlug(router, nextSlug)
   );
 
   const button = (
@@ -354,7 +493,35 @@ export const LoadingPage: NextPage = () => {
   );
 
   return (
-    <MainLayout title={PageTitle.Loading} heading={processName}>
+    <MainLayout
+      title={PageTitles.Loading}
+      heading="Tenancy and Household Check"
+    >
+      <TenancySummary
+        details={{
+          address: residentData.result
+            ? residentData.result.address
+            : residentData.error
+            ? ["Error"]
+            : undefined,
+          tenants: residentData.result
+            ? residentData.result.tenants.map((tenant) => tenant.fullName)
+            : residentData.error
+            ? ["Error"]
+            : undefined,
+          tenureType: tenancyData.result
+            ? tenancyData.result.tenureType
+            : tenancyData.error
+            ? "Error"
+            : undefined,
+          startDate: tenancyData.result
+            ? tenancyData.result.startDate
+            : tenancyData.error
+            ? "Error"
+            : undefined,
+        }}
+      />
+
       {errored && (
         <ErrorMessage>
           Something went wrong. Please try reopening this process from your

@@ -1,10 +1,4 @@
 import {
-  makeNextRouterUrls,
-  makeUrlFromSlug,
-  ProgressBar,
-  useOnlineWithRetry,
-} from "@hackney/mat-process-utils";
-import {
   Button,
   ErrorMessage,
   PageAnnouncement,
@@ -13,19 +7,38 @@ import {
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import basePath from "../../../config/basePath";
-import processName from "../../../config/processName";
-import { PageTitle } from "../../../helpers/PageTitle";
-import { persistProcessData } from "../../../helpers/persistProcessData";
-import { repeatingStepSlugs, Slug, stepSlugs } from "../../../helpers/Slug";
-import { MainLayout } from "../../../layouts/MainLayout";
+import ProgressBar from "../../../components/ProgressBar";
+import getProcessRef from "../../../helpers/getProcessRef";
+import persistProcessData from "../../../helpers/persistProcessData";
+import stringifyArray from "../../../helpers/stringifyArray";
+import urlsForRouter from "../../../helpers/urlsForRouter";
+import useDataValue from "../../../helpers/useDataValue";
+import useOnlineWithRetry from "../../../helpers/useOnlineWithRetry";
+import MainLayout from "../../../layouts/MainLayout";
+import PageSlugs, { urlObjectForSlug } from "../../../steps/PageSlugs";
+import PageTitles from "../../../steps/PageTitles";
+import Storage from "../../../storage/Storage";
 
 const PausePage: NextPage = () => {
   const router = useRouter();
+  const processRef = getProcessRef(router);
   const online = useOnlineWithRetry();
   const [progress, setProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState();
+
+  const residentData = useDataValue(
+    Storage.ExternalContext,
+    "residents",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+
+  const address = residentData.result?.address.join(", ");
+  const tenantNames = (residentData.result?.tenants || []).map(
+    (tenant) => tenant.fullName
+  );
+  const tenants = stringifyArray(tenantNames);
 
   let content: React.ReactElement;
 
@@ -38,41 +51,45 @@ const PausePage: NextPage = () => {
   } else {
     content = (
       <PageAnnouncement title="Process pause pending">
-        <Paragraph>
-          {online.result
-            ? "You are online."
-            : "You are currently working offline."}
-        </Paragraph>
-        <Paragraph>
-          The {processName} has been saved to your device but still needs to be
-          saved to your work tray so you can resume it later.
-        </Paragraph>
-        <Paragraph>
-          <strong>You need to be online on this device to continue.</strong>
-        </Paragraph>
-        <Paragraph>
-          If you can&apos;t go online now, when you are next online{" "}
-          <strong>on this device</strong>, please come back to this{" "}
-          {processName} from your work tray and click on the &lsquo;Save and
-          continue later&rsquo; button below that will become able to be
-          clicked.
-        </Paragraph>
-        {!online.error && online.result && (
-          <Paragraph>
-            <strong>You are online</strong>, and can save this {processName} to
-            your work tray now.
-          </Paragraph>
+        {residentData.loading ? (
+          "Loading..."
+        ) : (
+          <>
+            <Paragraph>
+              {online.result
+                ? "You are online."
+                : "You are currently working offline."}
+            </Paragraph>
+            <Paragraph>
+              The Tenancy and Household Check for the tenancy at {address},
+              occupied by {tenants}, has been saved to your device but still
+              needs to be saved to your work tray so you can resume it later.
+            </Paragraph>
+            <Paragraph>
+              <strong>You need to be online on this device to continue.</strong>
+            </Paragraph>
+            <Paragraph>
+              If you can&apos;t go online now, when you are next online{" "}
+              <strong>on this device</strong>, please come back to this Tenancy
+              and Household Check from your work tray and click on the
+              &lsquo;Save and continue later&rsquo; button below that will
+              become able to be clicked.
+            </Paragraph>
+            {!online.error && online.result && (
+              <Paragraph>
+                <strong>You are online</strong>, and can save this Tenancy and
+                Household Check to your work tray now.
+              </Paragraph>
+            )}
+          </>
         )}
       </PageAnnouncement>
     );
   }
 
-  const { href, as } = makeNextRouterUrls(
+  const { href, as } = urlsForRouter(
     router,
-    makeUrlFromSlug(router, Slug.Paused, basePath),
-    basePath,
-    stepSlugs,
-    repeatingStepSlugs
+    urlObjectForSlug(router, PageSlugs.Paused)
   );
 
   const disabled =
@@ -84,7 +101,7 @@ const PausePage: NextPage = () => {
     !as.pathname;
 
   return (
-    <MainLayout title={PageTitle.Pause}>
+    <MainLayout title={PageTitles.Pause}>
       {online.error && (
         <ErrorMessage>
           Something went wrong while checking your online status. Please reload
@@ -124,13 +141,9 @@ const PausePage: NextPage = () => {
                 setSaving(true);
 
                 await persistProcessData(router, setProgress);
-
-                sessionStorage.clear();
-
                 await router.push(href, as);
               } catch (err) {
                 console.error(err);
-
                 setSaveError(err);
               }
             }}

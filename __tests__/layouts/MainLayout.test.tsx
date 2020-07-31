@@ -1,6 +1,6 @@
 import React from "react";
 import { create } from "react-test-renderer";
-import { MainLayout } from "../../layouts/MainLayout";
+import MainLayout from "../../layouts/MainLayout";
 
 it("renders correctly for all props", () => {
   const component = create(
@@ -110,7 +110,7 @@ it("renders correctly for all props", () => {
                 feedback
               </a>
                
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>
@@ -267,7 +267,7 @@ it("renders correctly without optional props", () => {
                 feedback
               </a>
                
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>

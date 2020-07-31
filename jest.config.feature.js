@@ -1,4 +1,6 @@
 /* eslint-env node */
+const babelConfig = require("./babel.config");
+
 module.exports = {
   preset: "ts-jest/presets/js-with-ts",
   testRunner: "jest-circus/runner",
@@ -16,7 +18,7 @@ module.exports = {
   globals: {
     "ts-jest": {
       tsConfig: "<rootDir>/__tests__/tsconfig.json",
-      babelConfig: "<rootDir>/babel.config.js",
+      babelConfig,
     },
   },
 };

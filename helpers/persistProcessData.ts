@@ -1,14 +1,15 @@
-import { getProcessRef } from "@hackney/mat-process-utils";
 import { NextRouter } from "next/router";
-import { TransactionMode } from "remultiform";
-import basePath from "../config/basePath";
+import { TransactionMode } from "remultiform/database";
 import { externalStoreNames } from "../storage/ExternalDatabaseSchema";
 import { processStoreNames } from "../storage/ProcessDatabaseSchema";
-import { Storage } from "../storage/Storage";
-import { getProcessApiJwt } from "./getProcessApiJwt";
+import { residentStoreNames } from "../storage/ResidentDatabaseSchema";
+import Storage from "../storage/Storage";
+import basePath from "./basePath";
+import getProcessApiJwt from "./getProcessApiJwt";
+import getProcessRef from "./getProcessRef";
 import { persistPostVisitActions } from "./persistPostVisitActions";
 
-export const persistProcessData = async (
+const persistProcessData = async (
   router: NextRouter,
   setProgress?: (progress: number) => void
 ): Promise<void> => {
@@ -21,6 +22,8 @@ export const persistProcessData = async (
   if (
     !Storage.ExternalContext ||
     !Storage.ExternalContext.database ||
+    !Storage.ResidentContext ||
+    !Storage.ResidentContext.database ||
     !Storage.ProcessContext ||
     !Storage.ProcessContext.database
   ) {
@@ -116,10 +119,11 @@ export const persistProcessData = async (
     setProgress(progress);
   }
 
-  // To reduce risk of data loss, we only clear up the data if we successfully
-  // sent something to the backend.
+  // To reduce risk of data loss, we only clear up the data if we sent
+  // something to the backend.
   {
     const externalDatabase = await Storage.ExternalContext.database;
+    const residentDatabase = await Storage.ResidentContext.database;
     const processDatabase = await Storage.ProcessContext.database;
 
     await externalDatabase.transaction(
@@ -131,6 +135,27 @@ export const persistProcessData = async (
       },
       TransactionMode.ReadWrite
     );
+
+    const residentRefs = await processDatabase.get(
+      "tenantsPresent",
+      processRef
+    );
+
+    if (residentRefs) {
+      await residentDatabase.transaction(
+        residentStoreNames,
+        async (stores) => {
+          await Promise.all(
+            Object.values(stores).map(async (store) => {
+              for (const ref of residentRefs) {
+                await store.delete(ref);
+              }
+            })
+          );
+        },
+        TransactionMode.ReadWrite
+      );
+    }
 
     await processDatabase.transaction(
       processStoreNames,
@@ -147,3 +172,5 @@ export const persistProcessData = async (
     setProgress(1);
   }
 };
+
+export default persistProcessData;

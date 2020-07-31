@@ -1,8 +1,4 @@
 import {
-  makeNextRouterUrls,
-  makeUrlFromSlug,
-} from "@hackney/mat-process-utils";
-import {
   Button,
   Container,
   Header,
@@ -17,9 +13,9 @@ import NextHead from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import basePath from "../config/basePath";
-import processShortName from "../config/processShortName";
-import { repeatingStepSlugs, Slug, stepSlugs } from "../helpers/Slug";
+import basePath from "../helpers/basePath";
+import urlsForRouter from "../helpers/urlsForRouter";
+import PageSlugs, { urlObjectForSlug } from "../steps/PageSlugs";
 
 interface BaseProps {
   title?: string;
@@ -36,26 +32,21 @@ interface HeadedProps extends BaseProps {
   heading: string;
 }
 
-export type MainLayoutProps = TitledProps | HeadedProps;
+type Props = TitledProps | HeadedProps;
 
-export const MainLayout = ({
+const MainLayout = ({
   title,
   heading,
   pausable,
   children,
-}: MainLayoutProps): React.ReactElement => {
+}: Props): React.ReactElement => {
   const router = useRouter();
 
-  const fullTitle = `${
-    title || heading
-  } - ${processShortName} - Manage a tenancy`;
+  const fullTitle = `${title || heading} - THC - Manage a tenancy`;
 
-  const { href, as } = makeNextRouterUrls(
+  const { href, as } = urlsForRouter(
     router,
-    makeUrlFromSlug(router, Slug.Pause, basePath),
-    basePath,
-    stepSlugs,
-    repeatingStepSlugs
+    urlObjectForSlug(router, PageSlugs.Pause)
   );
 
   const pauseButton = (
@@ -74,7 +65,7 @@ export const MainLayout = ({
         <title>{fullTitle}</title>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
         />
         <link rel="manifest" href={`${basePath}/manifest.webmanifest`} />
         <link rel="shortcut icon" href={`${basePath}/favicons/favicon.ico`} />
@@ -271,7 +262,7 @@ export const MainLayout = ({
               <Link href={process.env.FEEDBACK_FORM_URL || ""} target="_blank">
                 feedback
               </Link>{" "}
-              will help us to improve it.
+              (online only, opens in a new tab) will help us to improve it.
             </Paragraph>
             <hr />
           </div>
@@ -311,3 +302,5 @@ export const MainLayout = ({
     </>
   );
 };
+
+export default MainLayout;

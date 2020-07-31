@@ -1,13 +1,42 @@
-import { NamedSchema, StoreNames } from "remultiform";
-import { databaseSchemaVersion } from "./databaseSchemaVersion";
+import { NamedSchema, StoreNames } from "remultiform/database";
 import { ProcessRef } from "./ProcessDatabaseSchema";
+import { ResidentRef } from "./ResidentDatabaseSchema";
 
-export const externalDatabaseName = `mat-process-${process.env.PROCESS_NAME}-external-${process.env.ENVIRONMENT_NAME}`;
+export const externalDatabaseName = `mat-process-${
+  process.env.PROCESS_NAME
+}-external-${process.env.ENVIRONMENT_NAME || "unknown"}`;
 
-export type ExternalDatabaseSchema = NamedSchema<
+type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,
-  typeof databaseSchemaVersion,
+  2,
   {
+    tenancy: {
+      key: ProcessRef;
+      value: {
+        tenureType: string;
+        startDate: Date;
+        currentBalance: string;
+      };
+    };
+
+    residents: {
+      key: ProcessRef;
+      value: {
+        address: string[];
+        tenants: {
+          id: ResidentRef;
+          fullName: string;
+          dateOfBirth: Date;
+        }[];
+        householdMembers: {
+          id: ResidentRef;
+          fullName: string;
+          dateOfBirth: Date;
+          relationship: string;
+        }[];
+      };
+    };
+
     officer: {
       key: ProcessRef;
       value: {
@@ -18,8 +47,10 @@ export type ExternalDatabaseSchema = NamedSchema<
 >;
 
 const storeNames: {
-  [_ in StoreNames<ExternalDatabaseSchema["schema"]>]: boolean;
+  [Name in StoreNames<ExternalDatabaseSchema["schema"]>]: boolean;
 } = {
+  tenancy: true,
+  residents: true,
   officer: true,
 };
 
@@ -32,3 +63,5 @@ export const externalStoreNames = Object.entries(storeNames)
     ],
     [] as StoreNames<ExternalDatabaseSchema["schema"]>[]
   );
+
+export default ExternalDatabaseSchema;

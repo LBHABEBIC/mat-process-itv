@@ -1,4 +1,3 @@
-import { isInManagerReview, ProcessStage } from "@hackney/mat-process-utils";
 import {
   Button,
   Heading,
@@ -9,23 +8,19 @@ import {
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import processName from "../../../config/processName";
-import { getProcessStage } from "../../../helpers/getProcessStage";
-import { PageTitle } from "../../../helpers/PageTitle";
-import { MainLayout } from "../../../layouts/MainLayout";
+import isManager from "../../../helpers/isManager";
+import MainLayout from "../../../layouts/MainLayout";
+import PageTitles from "../../../steps/PageTitles";
 
 const ConfirmedPage: NextPage = () => {
   const router = useRouter();
-  const processStage = getProcessStage(router);
-  const isInManagerStage = isInManagerReview(
-    processStage as ProcessStage | undefined
-  );
+  const isInManagerStage = isManager(router);
 
   const { status } = router.query;
 
-  const managerApprovedText = `The ${processName} has been approved by you.`;
-  const managerDeclinedText = `The ${processName} has been declined by you. The Housing Officer will be notified.`;
-  const officerText = `The ${processName} has been submitted for manager review.`;
+  const managerApprovedText = `The Tenancy and Household Check has been approved by you.`;
+  const managerDeclinedText = `The Tenancy and Household Check has been declined by you. The Housing Officer will be notified.`;
+  const officerText = `The Tenancy and Household Check has been submitted for manager review.`;
 
   const managerText = status
     ? status === "2"
@@ -34,8 +29,11 @@ const ConfirmedPage: NextPage = () => {
     : "Loading...";
 
   return (
-    <MainLayout title={PageTitle.Confirmed}>
-      <PageAnnouncement title="Process submission confirmed">
+    <MainLayout title={PageTitles.Confirmed}>
+      <PageAnnouncement
+        title="Process submission confirmed"
+        headingLevel={HeadingLevels.H1}
+      >
         <Paragraph>{isInManagerStage ? managerText : officerText}</Paragraph>
       </PageAnnouncement>
 
@@ -46,12 +44,14 @@ const ConfirmedPage: NextPage = () => {
             disabled={!process.env.DIVERSITY_FORM_URL}
             onClick={(): void => {
               if (process.env.DIVERSITY_FORM_URL) {
-                location.assign(process.env.DIVERSITY_FORM_URL);
+                window.open(process.env.DIVERSITY_FORM_URL);
               }
             }}
           >
             Go to diversity monitoring form
           </Button>
+          <br />
+          (online only, opens in a new tab)
         </Paragraph>
       )}
       <Paragraph>

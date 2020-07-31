@@ -17,8 +17,10 @@ export const precacheAll = async (router: NextRouter): Promise<boolean> => {
   return true;
 };
 
-export const usePrecacheAll = (): UseAsyncReturn<boolean, []> => {
+const usePrecacheAll = (): UseAsyncReturn<boolean, []> => {
   const router = useRouter();
 
   return useAsync(async () => precacheAll(router), []);
 };
+
+export default usePrecacheAll;

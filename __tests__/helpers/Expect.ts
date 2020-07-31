@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Locator } from "selenium-webdriver";
 
-export class Expect {
+class Expect {
   static async pageToContain(content: string): Promise<void> {
     const element = await browser!.findElement({ tagName: "body" });
 
@@ -26,3 +26,5 @@ export class Expect {
     await expect(element.isEnabled()).resolves.toEqual(false);
   }
 }
+
+export default Expect;

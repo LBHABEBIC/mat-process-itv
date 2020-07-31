@@ -1,7 +1,7 @@
 import { v1 as uuid } from "uuid";
-import { databaseSchemaVersion } from "../../storage/databaseSchemaVersion";
+import databaseSchemaVersion from "../../storage/databaseSchemaVersion";
 
-export const createTestProcess = async (ref = uuid()): Promise<void> => {
+export default async (ref = uuid()): Promise<void> => {
   process.env.TEST_PROCESS_REF = ref;
 
   const body = JSON.stringify({

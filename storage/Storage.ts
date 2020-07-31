@@ -1,26 +1,49 @@
-import {
-  Database,
-  DatabaseContext,
-  StoreValue,
-  TransactionMode,
-} from "remultiform";
+import { cloneDeep } from "lodash";
+import { Database, StoreValue, TransactionMode } from "remultiform/database";
+import { DatabaseContext } from "remultiform/database-context";
 import { v5 as uuid } from "uuid";
-import { databaseSchemaVersion } from "./databaseSchemaVersion";
-import {
+import databaseSchemaVersion from "./databaseSchemaVersion";
+import ExternalDatabaseSchema, {
   externalDatabaseName,
-  ExternalDatabaseSchema,
 } from "./ExternalDatabaseSchema";
-import { migrateData } from "./migrations/data/migrateData";
-import { migrateSchema } from "./migrations/migrateSchema";
+import dataMigrations from "./migrations/data";
 import externalSchemaMigrations from "./migrations/schema/external";
 import processSchemaMigrations from "./migrations/schema/process";
-import {
+import residentSchemaMigrations from "./migrations/schema/resident";
+import ProcessDatabaseSchema, {
   processDatabaseName,
-  ProcessDatabaseSchema,
   ProcessJson,
   ProcessRef,
   processStoreNames,
 } from "./ProcessDatabaseSchema";
+import ResidentDatabaseSchema, {
+  residentDatabaseName,
+  ResidentRef,
+  residentStoreNames,
+} from "./ResidentDatabaseSchema";
+
+const migrateProcessData = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  processData: any,
+  oldVersion: number,
+  newVersion: number
+  // eslint-disable-next-line @typescript-eslint/require-await
+): Promise<Required<ProcessJson>["processData"]> => {
+  let version = oldVersion;
+  processData = cloneDeep(processData);
+
+  while (version < newVersion) {
+    const migration = dataMigrations[version];
+
+    if (migration) {
+      processData = migration(processData);
+    }
+
+    version++;
+  }
+
+  return processData;
+};
 
 interface ImageJson {
   id: string;
@@ -32,24 +55,38 @@ interface ImageIdentifier {
   ext: string;
 }
 
-export class Storage {
+export default class Storage {
   static ExternalContext:
     | DatabaseContext<ExternalDatabaseSchema>
     | undefined = undefined;
   static ProcessContext:
     | DatabaseContext<ProcessDatabaseSchema>
     | undefined = undefined;
+  static ResidentContext:
+    | DatabaseContext<ResidentDatabaseSchema>
+    | undefined = undefined;
 
   static init(): void {
     const externalDatabasePromise = Database.open<ExternalDatabaseSchema>(
       externalDatabaseName,
-      databaseSchemaVersion,
+      2,
       {
         upgrade(upgrade) {
-          migrateSchema<ExternalDatabaseSchema>(
-            upgrade,
-            externalSchemaMigrations
-          );
+          if (upgrade.newVersion === undefined) {
+            return;
+          }
+
+          let version = upgrade.oldVersion;
+
+          while (version < upgrade.newVersion) {
+            const migration = externalSchemaMigrations[version];
+
+            if (migration) {
+              migration(upgrade);
+            }
+
+            version++;
+          }
         },
       }
     );
@@ -59,16 +96,52 @@ export class Storage {
       databaseSchemaVersion,
       {
         upgrade(upgrade) {
-          migrateSchema<ProcessDatabaseSchema>(
-            upgrade,
-            processSchemaMigrations
-          );
+          if (upgrade.newVersion === undefined) {
+            return;
+          }
+
+          let version = upgrade.oldVersion;
+
+          while (version < upgrade.newVersion) {
+            const migration = processSchemaMigrations[version];
+
+            if (migration) {
+              migration(upgrade);
+            }
+
+            version++;
+          }
+        },
+      }
+    );
+
+    const residentDatabasePromise = Database.open<ResidentDatabaseSchema>(
+      residentDatabaseName,
+      databaseSchemaVersion,
+      {
+        upgrade(upgrade) {
+          if (upgrade.newVersion === undefined) {
+            return;
+          }
+
+          let version = upgrade.oldVersion;
+
+          while (version < upgrade.newVersion) {
+            const migration = residentSchemaMigrations[version];
+
+            if (migration) {
+              migration(upgrade);
+            }
+
+            version++;
+          }
         },
       }
     );
 
     this.ExternalContext = new DatabaseContext(externalDatabasePromise);
     this.ProcessContext = new DatabaseContext(processDatabasePromise);
+    this.ResidentContext = new DatabaseContext(residentDatabasePromise);
   }
 
   static async getProcessJson(
@@ -86,15 +159,15 @@ export class Storage {
 
     const processDatabase = await this.ProcessContext.database;
 
-    let lastModifiedAt: string | undefined;
+    let lastModified: string | undefined;
 
     let processData = (
       await Promise.all(
         processStoreNames.map(async (storeName) => {
           const value = await processDatabase.get(storeName, processRef);
 
-          if (storeName === "lastModifiedAt") {
-            lastModifiedAt = value as StoreValue<
+          if (storeName === "lastModified") {
+            lastModified = value as StoreValue<
               ProcessDatabaseSchema["schema"],
               typeof storeName
             >;
@@ -112,6 +185,44 @@ export class Storage {
       }),
       {}
     ) as Exclude<ProcessJson["processData"], undefined>;
+
+    const residentRefs = processData.tenantsPresent as
+      | ResidentRef[]
+      | undefined;
+
+    if (residentRefs && residentRefs.length && this.ResidentContext) {
+      const residentDatabase = await this.ResidentContext.database;
+
+      processData.residents = (
+        await Promise.all(
+          residentRefs.map(async (ref) => {
+            return {
+              [ref]: (
+                await Promise.all(
+                  residentStoreNames.map(async (storeName) => {
+                    const value = await residentDatabase.get(storeName, ref);
+
+                    return { [storeName]: value };
+                  })
+                )
+              ).reduce(
+                (valuesObj, valueObj) => ({
+                  ...valuesObj,
+                  ...valueObj,
+                }),
+                {}
+              ),
+            };
+          })
+        )
+      ).reduce(
+        (valuesObj, valueObj) => ({
+          ...valuesObj,
+          ...valueObj,
+        }),
+        {}
+      );
+    }
 
     let processDataString = JSON.stringify(processData);
 
@@ -143,7 +254,7 @@ export class Storage {
 
     return {
       processJson: {
-        dateLastModified: lastModifiedAt,
+        dateLastModified: lastModified,
         // Ideally we'd be exposing the version on the database directly, but
         // this hack works for now.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,29 +308,43 @@ export class Storage {
       throw new Error("No process database to update");
     }
 
+    if (!this.ResidentContext || !this.ResidentContext.database) {
+      throw new Error("No resident database to update");
+    }
+
     const processDatabase = await this.ProcessContext.database;
+    const residentDatabase = await this.ResidentContext.database;
+
+    if (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (processDatabase as any).db.version !==
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (residentDatabase as any).db.version
+    ) {
+      throw new Error("Process and resident database versions must match");
+    }
 
     // Ideally we'd be exposing the version on the databases directly, but
     // this hack works for now.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const schemaVersion = (processDatabase as any).db.version;
 
-    const migratedProcessData = await migrateData(
+    const migratedProcessData = await migrateProcessData(
       processData,
       dataSchemaVersion || 0,
       schemaVersion
     );
 
-    const lastModifiedAt = new Date(dateLastModified || dateCreated);
+    const lastModified = new Date(dateLastModified || dateCreated);
 
     const isNewer = await this.isProcessNewerThanStorage(
       processRef,
-      lastModifiedAt
+      lastModified
     );
 
     if (isNewer) {
       const realProcessStoreNames = processStoreNames.filter(
-        (storeName) => storeName !== "lastModifiedAt"
+        (storeName) => storeName !== "lastModified"
       );
 
       await processDatabase.transaction(
@@ -244,13 +369,52 @@ export class Storage {
         },
         TransactionMode.ReadWrite
       );
+
+      const residentRefs = migratedProcessData.tenantsPresent;
+      const migratedResidentData = migratedProcessData.residents;
+
+      if (migratedResidentData && residentRefs && residentRefs.length > 0) {
+        await residentDatabase.transaction(
+          residentStoreNames,
+          async (stores) => {
+            await Promise.all([
+              ...residentStoreNames.map(async (storeName) => {
+                const store = stores[storeName];
+
+                await Promise.all(
+                  residentRefs.map(async (residentRef) => {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    const ref = residentRef!;
+                    const allValues = migratedResidentData[ref];
+                    const value =
+                      allValues === undefined
+                        ? undefined
+                        : allValues[storeName];
+
+                    if (value === undefined) {
+                      await store.delete(ref);
+                    } else {
+                      await store.put(
+                        ref,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        value as any
+                      );
+                    }
+                  })
+                );
+              }),
+            ]);
+          },
+          TransactionMode.ReadWrite
+        );
+      }
     }
 
     // Do this last so if anything goes wrong, we can try again.
     await processDatabase.put(
-      "lastModifiedAt",
+      "lastModified",
       processRef,
-      lastModifiedAt.toISOString()
+      lastModified.toISOString()
     );
 
     return isNewer;
@@ -267,12 +431,12 @@ export class Storage {
 
     const database = await this.ProcessContext.database;
 
-    await database.put("lastModifiedAt", processRef, new Date().toISOString());
+    await database.put("lastModified", processRef, new Date().toISOString());
   }
 
   static async isProcessNewerThanStorage(
     processRef: string,
-    lastModifiedAt: Date
+    lastModified: Date
   ): Promise<boolean> {
     if (!this.ProcessContext) {
       return false;
@@ -280,10 +444,10 @@ export class Storage {
 
     const db = await this.ProcessContext.database;
 
-    const storedLastModifiedAt = await db.get("lastModifiedAt", processRef);
+    const storedLastModified = await db.get("lastModified", processRef);
 
-    return storedLastModifiedAt === undefined
+    return storedLastModified === undefined
       ? true
-      : lastModifiedAt > new Date(storedLastModifiedAt);
+      : lastModified > new Date(storedLastModified);
   }
 }

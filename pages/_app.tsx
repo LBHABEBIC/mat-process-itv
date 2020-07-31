@@ -1,6 +1,8 @@
-import { makeNextRouterUrls, ON_SERVER } from "@hackney/mat-process-utils";
 import "cross-fetch/polyfill";
-import { ComponentRegister, LinkComponentTypeProps } from "lbh-frontend-react";
+import {
+  ComponentRegister,
+  LinkComponentTypeProps,
+} from "lbh-frontend-react/helpers";
 import NextApp from "next/app";
 import ErrorPage from "next/error";
 import NextLink from "next/link";
@@ -8,24 +10,19 @@ import { useRouter } from "next/router";
 import "normalize.css";
 import React from "react";
 import isEqual from "react-fast-compare";
-import { DatabaseProvider } from "remultiform";
-import basePath from "../config/basePath";
-import { repeatingStepSlugs, stepSlugs } from "../helpers/Slug";
+import { DatabaseProvider } from "remultiform/database-context";
+import isClient from "../helpers/isClient";
+import PropTypes from "../helpers/PropTypes";
+import urlsForRouter from "../helpers/urlsForRouter";
 import { precacheAll } from "../helpers/usePrecacheAll";
-import { Storage } from "../storage/Storage";
+import Storage from "../storage/Storage";
 
 const Link: React.FunctionComponent<LinkComponentTypeProps> = (props) => {
   const { href: originalHref } = props;
 
   const router = useRouter();
 
-  const { href, as } = makeNextRouterUrls(
-    router,
-    originalHref,
-    basePath,
-    stepSlugs,
-    repeatingStepSlugs
-  );
+  const { href, as } = urlsForRouter(router, originalHref);
 
   if (
     !href.pathname ||
@@ -42,6 +39,13 @@ const Link: React.FunctionComponent<LinkComponentTypeProps> = (props) => {
   );
 };
 
+Link.propTypes = {
+  id: PropTypes.string,
+  className: PropTypes.string,
+  href: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
 ComponentRegister.init({
   components: {
     Link,
@@ -49,8 +53,8 @@ ComponentRegister.init({
 });
 
 // The user's data does not exist on the server, so there's no need to attempt
-// to store or access it.
-if (!ON_SERVER) {
+// to access it if unless we're on the client.
+if (isClient) {
   Storage.init();
 }
 
@@ -126,6 +130,14 @@ export default class App extends NextApp<{}, {}, State> {
     if (Storage.ProcessContext) {
       page = (
         <DatabaseProvider context={Storage.ProcessContext}>
+          {page}
+        </DatabaseProvider>
+      );
+    }
+
+    if (Storage.ResidentContext) {
+      page = (
+        <DatabaseProvider context={Storage.ResidentContext}>
           {page}
         </DatabaseProvider>
       );
