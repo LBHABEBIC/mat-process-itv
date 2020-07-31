@@ -529,7 +529,7 @@ export const LoadingPage: NextPage = () => {
         </ErrorMessage>
       )}
 
-      <Heading level={HeadingLevels.H2}>Loading</Heading>
+      {loading && <Heading level={HeadingLevels.H2}>Loading</Heading>}
       <Paragraph>
         {isInManagerStage || isInClosedStage
           ? "The system is fetching the information you need for this process."
