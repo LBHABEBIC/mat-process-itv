@@ -56,17 +56,7 @@ const step = {
           key: "paragraph-2",
           Component: Paragraph,
           props: {
-            children:
-              "Housing Services carry out unannounced visits at tenants' homes.",
-          },
-        })
-      ),
-      ComponentWrapper.wrapStatic(
-        new StaticComponent({
-          key: "paragraph-3",
-          Component: Paragraph,
-          props: {
-            children: "The information we collect from our visits helps us to:",
+            children: "The purpose of this Introductory Tenancy Visit is",
           },
         })
       ),
@@ -76,9 +66,9 @@ const step = {
           Component: List,
           props: {
             items: [
-              "maintain up-to-date records of who lives at a property",
-              "ensure properties are being maintained",
-              "and identify any support needs.",
+              "to check you've moved into the property OK",
+              "to check that there are no outstanding repairs",
+              "to see if you have any queries about your tenancy or the estate",
             ],
             type: ListTypes.Bullet,
           } as ListProps,
@@ -90,7 +80,7 @@ const step = {
           Component: Paragraph,
           props: {
             children:
-              "We can also give advice about any tenancy issues or other enquiries.",
+              "I'll be checking your proof of ID and making sure you understand the conditions of your tenancy.",
           },
         })
       ),
