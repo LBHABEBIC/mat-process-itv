@@ -1,23 +1,156 @@
-import isOnline from "is-online";
+import * as router from "next/router";
 import React from "react";
 import { act, create, ReactTestRenderer } from "react-test-renderer";
-import SubmitPage from "../../../../pages/thc/[processRef]/submit";
+import LoadingPage from "../../../../pages/itv[processRef]/loading";
+import databaseSchemaVersion from "../../../../storage/databaseSchemaVersion";
+import { processStoreNames } from "../../../../storage/ProcessDatabaseSchema";
+import Storage from "../../../../storage/Storage";
 import { promiseToWaitForNextTick } from "../../../helpers/promise";
+import { spyOnConsoleError } from "../../../helpers/spies";
 
-jest.mock("is-online");
+const originalExternalContext = Storage.ExternalContext;
+const originalProcessContext = Storage.ProcessContext;
+const originalResidentContext = Storage.ResidentContext;
 
-const isOnlineMock = (isOnline as unknown) as jest.MockInstance<
-  Promise<boolean>,
-  [isOnline.Options?]
->;
+beforeEach(() => {
+  sessionStorage.setItem("currentProcessRef", "test-process-ref");
+  sessionStorage.setItem(
+    "test-process-ref:processApiJwt",
+    "test-process-api-jwt"
+  );
+  sessionStorage.setItem("test-process-ref:matApiJwt", "test-mat-api-jwt");
+  sessionStorage.setItem("test-process-ref:matApiData", "test-mat-api-data");
+
+  Storage.ExternalContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      put: jest.fn(),
+    },
+  };
+
+  Storage.ProcessContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      db: { version: databaseSchemaVersion },
+      get: (): undefined => undefined,
+      put: jest.fn(),
+      transaction: async (_, tx): Promise<void> => {
+        await tx(
+          processStoreNames.reduce(
+            (stores, storeName) => ({
+              ...stores,
+              [storeName]: {
+                ...jest.fn()(),
+                put: jest.fn(),
+                delete: jest.fn(),
+              },
+            }),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {} as any
+          )
+        );
+      },
+    },
+  };
+  Storage.ResidentContext = {
+    ...jest.fn()(),
+    database: {
+      ...jest.fn()(),
+      db: { version: databaseSchemaVersion },
+    },
+  };
+
+  jest.spyOn(router, "useRouter").mockImplementation(() => ({
+    ...jest.fn()(),
+    query: { processRef: "test-process-ref" },
+  }));
+});
+
+afterEach(() => {
+  sessionStorage.clear();
+
+  Storage.ExternalContext = originalExternalContext;
+  Storage.ProcessContext = originalProcessContext;
+  Storage.ResidentContext = originalResidentContext;
+});
 
 it("renders correctly when online", async () => {
-  isOnlineMock.mockResolvedValue(true);
+  fetchMock.mockResponse(
+    ({ method, url }): Promise<string> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let body: any = {};
+
+      if (
+        url.includes("/api/v1/processes") &&
+        url.includes("/images/") &&
+        method === "GET"
+      ) {
+        body = {
+          base64Image: "data:image/jpeg;base64,someimagedata",
+        };
+      } else if (url.includes("/api/v1/processes") && method === "GET") {
+        body = {
+          processData: {
+            dateCreated: new Date(2019, 1),
+            dateLastModified: new Date(2019, 3),
+            dataSchemaVersion: 0,
+            processData: {
+              property: {
+                outside: {
+                  images: ["image:imageid.jpeg"],
+                },
+              },
+            },
+          },
+        };
+      } else if (url.includes("/api/v1/tenancies") && method === "GET") {
+        body = {
+          results: {
+            tenuretype: "Secure",
+            tenancyStartDate: "2019-01-01",
+          },
+        };
+      } else if (url.includes("/api/v1/residents") && method === "GET") {
+        body = {
+          results: [
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: true,
+              fullName: "TestTenant1",
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: true,
+              fullName: "TestTenant2",
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: false,
+              fullName: "TestHouseholdMember1",
+            },
+            {
+              fullAddressDisplay:
+                "FLAT 1\r\n1 TEST STREET\r\nTEST TOWN TT1 1TT",
+              responsible: false,
+              fullName: "TestHouseholdMember2",
+            },
+          ],
+        };
+      }
+
+      return Promise.resolve(JSON.stringify(body));
+    }
+  );
 
   let component: ReactTestRenderer | undefined = undefined;
 
   await act(async () => {
-    component = create(<SubmitPage />);
+    component = create(<LoadingPage />);
 
     await promiseToWaitForNextTick();
   });
@@ -114,7 +247,7 @@ it("renders correctly when online", async () => {
                 BETA
               </strong>
                This is a new service – your
-               
+
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -122,81 +255,144 @@ it("renders correctly when online", async () => {
               >
                 feedback
               </a>
-               
+
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>
           <div
             className="heading"
-          />
-          <section
-            className="lbh-page-announcement"
           >
-            <h3
-              className="lbh-page-announcement__title"
+            <h1
+              className="lbh-heading-h1"
             >
-              Process submission pending
-            </h3>
+              Tenancy and Household Check
+            </h1>
+          </div>
+          <dl
+            className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
+          >
             <div
-              className="lbh-page-announcement__content"
+              className="govuk-summary-list__row lbh-summary-list__row"
             >
-              <p
-                className="lbh-body"
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
               >
-                You are online.
-              </p>
-              <p
-                className="lbh-body"
+                Address
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
               >
-                The Tenancy and Household Check for the tenancy at 
-                , occupied by 
-                
-                , has been saved to your device ready to be sent to your manager for review.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You need to be online on this device to continue.
-                </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online
-                 
-                <strong>
-                  on this device
-                </strong>
-                , please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You are online
-                </strong>
-                , and can submit this Tenancy and Household Check to your manager now.
-              </p>
+                Flat 1, 1 Test Street, Test Town, TT1 1TT
+              </dd>
             </div>
-          </section>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenants
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                TestTenant1, TestTenant2
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenure type
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Secure
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenancy start date
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                1 January 2019
+              </dd>
+            </div>
+          </dl>
+          <style
+            jsx={true}
+          >
+
+            :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
+              padding-bottom: 0 !important;
+            }
+
+          </style>
+          <h2
+            className="lbh-heading-h2"
+          >
+            Loading
+          </h2>
+          <p
+            className="lbh-body"
+          >
+            The system is updating the information you need for this process so that you can go offline at any point.
+          </p>
+          <label
+            className="govuk-label lbh-label"
+          >
+            Ready (updated)
+            <div>
+              <div
+                style={
+                  Object {
+                    "width": "100%",
+                  }
+                }
+              />
+            </div>
+            <style
+              jsx={true}
+            >
+
+            div {
+              width: 100%;
+              height: 1em;
+              background-color: #7fb2a7;
+            }
+
+            div &gt; div {
+              width: 0;
+              background-color: #00664f;
+            }
+
+            </style>
+          </label>
           <button
             aria-disabled={false}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
             data-testid="submit"
             disabled={false}
             onClick={[Function]}
           >
-            Save and submit to manager
+            Go
           </button>
         </div>
       </main>,
       <style
         jsx={true}
       >
-        
+
             :global(#main-content) {
               padding-top: 0;
             }
@@ -214,22 +410,85 @@ it("renders correctly when online", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-          
+
       </style>,
     ]
   `);
 });
 
 it("renders correctly when offline", async () => {
-  isOnlineMock.mockResolvedValue(false);
+  fetchMock.mockReject(new Error("Request timed out"));
+
+  const consoleErrorSpy = spyOnConsoleError();
 
   let component: ReactTestRenderer | undefined = undefined;
 
   await act(async () => {
-    component = create(<SubmitPage />);
+    component = create(<LoadingPage />);
 
     await promiseToWaitForNextTick();
   });
+
+  expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+      Array [
+        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
+      ],
+    ]
+  `);
+
+  consoleErrorSpy.mockRestore();
 
   expect(component).toMatchInlineSnapshot(`
     Array [
@@ -323,7 +582,7 @@ it("renders correctly when offline", async () => {
                 BETA
               </strong>
                This is a new service – your
-               
+
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -331,73 +590,155 @@ it("renders correctly when offline", async () => {
               >
                 feedback
               </a>
-               
+
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
           </div>
           <div
             className="heading"
-          />
-          <section
-            className="lbh-page-announcement"
           >
-            <h3
-              className="lbh-page-announcement__title"
+            <h1
+              className="lbh-heading-h1"
             >
-              Process submission pending
-            </h3>
+              Tenancy and Household Check
+            </h1>
+          </div>
+          <dl
+            className="govuk-summary-list lbh-summary-list govuk-summary-list--no-border mat-tenancy-summary"
+          >
             <div
-              className="lbh-page-announcement__content"
+              className="govuk-summary-list__row lbh-summary-list__row"
             >
-              <p
-                className="lbh-body"
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
               >
-                You are currently working offline.
-              </p>
-              <p
-                className="lbh-body"
+                Address
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
               >
-                The Tenancy and Household Check for the tenancy at 
-                , occupied by 
-                
-                , has been saved to your device ready to be sent to your manager for review.
-              </p>
-              <p
-                className="lbh-body"
-              >
-                <strong>
-                  You need to be online on this device to continue.
-                </strong>
-              </p>
-              <p
-                className="lbh-body"
-              >
-                If you can't go online now, when you are next online
-                 
-                <strong>
-                  on this device
-                </strong>
-                , please come back to this Tenancy and Household Check from your work tray and click on the ‘Save and submit to manager’ button below that will become able to be clicked.
-              </p>
+                Error
+              </dd>
             </div>
-          </section>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenants
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Error
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenure type
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Error
+              </dd>
+            </div>
+            <div
+              className="govuk-summary-list__row lbh-summary-list__row"
+            >
+              <dt
+                className="govuk-summary-list__key lbh-summary-list__key"
+              >
+                Tenancy start date
+              </dt>
+              <dd
+                className="govuk-summary-list__value lbh-summary-list__value"
+              >
+                Error
+              </dd>
+            </div>
+          </dl>
+          <style
+            jsx={true}
+          >
+
+            :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
+              padding-bottom: 0 !important;
+            }
+
+          </style>
+          <span
+            className="govuk-error-message lbh-error-message"
+          >
+            <span
+              className="govuk-visually-hidden"
+            >
+              Error
+              :
+            </span>
+            Something went wrong. Please try reopening this process from your worktray.
+          </span>
+          <h2
+            className="lbh-heading-h2"
+          >
+            Loading
+          </h2>
+          <p
+            className="lbh-body"
+          >
+            The system is updating the information you need for this process so that you can go offline at any point.
+          </p>
+          <label
+            className="govuk-label lbh-label"
+          >
+            Error
+            <div>
+              <div
+                style={
+                  Object {
+                    "width": "43%",
+                  }
+                }
+              />
+            </div>
+            <style
+              jsx={true}
+            >
+
+            div {
+              width: 100%;
+              height: 1em;
+              background-color: #7fb2a7;
+            }
+
+            div &gt; div {
+              width: 0;
+              background-color: #00664f;
+            }
+
+            </style>
+          </label>
           <button
             aria-disabled={true}
             className="govuk-button lbh-button"
-            data-prevent-double-click={true}
             data-testid="submit"
             disabled={true}
             onClick={[Function]}
           >
-            Waiting for connectivity...
+            Loading...
           </button>
         </div>
       </main>,
       <style
         jsx={true}
       >
-        
+
             :global(#main-content) {
               padding-top: 0;
             }
@@ -415,7 +756,7 @@ it("renders correctly when offline", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-          
+
       </style>,
     ]
   `);
