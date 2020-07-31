@@ -5,7 +5,6 @@ import household from "./household";
 import idAndResidency from "./id-and-residency";
 import previsit from "./previsit";
 import propertyInspection from "./property-inspection";
-import unableToEnter from "./unable-to-enter";
 import wellbeingSupport from "./wellbeing-support";
 
 const steps = [
@@ -17,7 +16,6 @@ const steps = [
   ...(household as ProcessStepDefinition<ProcessDatabaseSchema>[]),
   ...(propertyInspection as ProcessStepDefinition<ProcessDatabaseSchema>[]),
   ...(wellbeingSupport as ProcessStepDefinition<ProcessDatabaseSchema>[]),
-  ...(unableToEnter as ProcessStepDefinition<ProcessDatabaseSchema>[]),
 ];
 
 export default steps;
