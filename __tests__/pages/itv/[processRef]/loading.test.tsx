@@ -247,7 +247,7 @@ it("renders correctly when online", async () => {
                 BETA
               </strong>
                This is a new service – your
-
+               
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -255,7 +255,7 @@ it("renders correctly when online", async () => {
               >
                 feedback
               </a>
-
+               
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
@@ -332,11 +332,11 @@ it("renders correctly when online", async () => {
           <style
             jsx={true}
           >
-
+            
             :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
               padding-bottom: 0 !important;
             }
-
+          
           </style>
           <h2
             className="lbh-heading-h2"
@@ -364,7 +364,7 @@ it("renders correctly when online", async () => {
             <style
               jsx={true}
             >
-
+              
             div {
               width: 100%;
               height: 1em;
@@ -375,7 +375,7 @@ it("renders correctly when online", async () => {
               width: 0;
               background-color: #00664f;
             }
-
+          
             </style>
           </label>
           <button
@@ -392,7 +392,7 @@ it("renders correctly when online", async () => {
       <style
         jsx={true}
       >
-
+        
             :global(#main-content) {
               padding-top: 0;
             }
@@ -410,7 +410,7 @@ it("renders correctly when online", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-
+          
       </style>,
     ]
   `);
@@ -432,58 +432,58 @@ it("renders correctly when offline", async () => {
   expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/processes/test-process-ref/processData?jwt=test-process-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/residents?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/tenancies?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
       Array [
-        [Error: Fetch failed for undefined: /thc/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
+        [Error: Fetch failed for undefined: /itv/api/v1/officer?data=test-mat-api-data&jwt=test-mat-api-jwt],
       ],
     ]
   `);
@@ -582,7 +582,7 @@ it("renders correctly when offline", async () => {
                 BETA
               </strong>
                This is a new service – your
-
+               
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -590,7 +590,7 @@ it("renders correctly when offline", async () => {
               >
                 feedback
               </a>
-
+               
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
@@ -667,11 +667,11 @@ it("renders correctly when offline", async () => {
           <style
             jsx={true}
           >
-
+            
             :global(.mat-tenancy-summary dt, .mat-tenancy-summary dd) {
               padding-bottom: 0 !important;
             }
-
+          
           </style>
           <span
             className="govuk-error-message lbh-error-message"
@@ -710,7 +710,7 @@ it("renders correctly when offline", async () => {
             <style
               jsx={true}
             >
-
+              
             div {
               width: 100%;
               height: 1em;
@@ -721,7 +721,7 @@ it("renders correctly when offline", async () => {
               width: 0;
               background-color: #00664f;
             }
-
+          
             </style>
           </label>
           <button
@@ -738,7 +738,7 @@ it("renders correctly when offline", async () => {
       <style
         jsx={true}
       >
-
+        
             :global(#main-content) {
               padding-top: 0;
             }
@@ -756,7 +756,7 @@ it("renders correctly when offline", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-
+          
       </style>,
     ]
   `);

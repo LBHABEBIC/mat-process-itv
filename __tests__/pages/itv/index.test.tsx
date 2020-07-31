@@ -143,7 +143,7 @@ it("renders correctly when offline", async () => {
                 BETA
               </strong>
                This is a new service – your
-
+               
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -151,7 +151,7 @@ it("renders correctly when offline", async () => {
               >
                 feedback
               </a>
-
+               
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
@@ -175,7 +175,7 @@ it("renders correctly when offline", async () => {
       <style
         jsx={true}
       >
-
+        
             :global(#main-content) {
               padding-top: 0;
             }
@@ -193,7 +193,7 @@ it("renders correctly when offline", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-
+          
       </style>,
     ]
   `);

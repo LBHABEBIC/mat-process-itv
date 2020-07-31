@@ -114,7 +114,7 @@ it("renders correctly when online", async () => {
                 BETA
               </strong>
                This is a new service – your
-
+               
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -122,7 +122,7 @@ it("renders correctly when online", async () => {
               >
                 feedback
               </a>
-
+               
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
@@ -149,9 +149,9 @@ it("renders correctly when online", async () => {
               <p
                 className="lbh-body"
               >
-                The Tenancy and Household Check for the tenancy at
-                , occupied by
-
+                The Tenancy and Household Check for the tenancy at 
+                , occupied by 
+                
                 , has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
@@ -165,7 +165,7 @@ it("renders correctly when online", async () => {
                 className="lbh-body"
               >
                 If you can't go online now, when you are next online
-
+                 
                 <strong>
                   on this device
                 </strong>
@@ -196,7 +196,7 @@ it("renders correctly when online", async () => {
       <style
         jsx={true}
       >
-
+        
             :global(#main-content) {
               padding-top: 0;
             }
@@ -214,7 +214,7 @@ it("renders correctly when online", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-
+          
       </style>,
     ]
   `);
@@ -323,7 +323,7 @@ it("renders correctly when offline", async () => {
                 BETA
               </strong>
                This is a new service – your
-
+               
               <a
                 className="govuk-link lbh-link"
                 href="https://feedback.form"
@@ -331,7 +331,7 @@ it("renders correctly when offline", async () => {
               >
                 feedback
               </a>
-
+               
               (online only, opens in a new tab) will help us to improve it.
             </p>
             <hr />
@@ -358,9 +358,9 @@ it("renders correctly when offline", async () => {
               <p
                 className="lbh-body"
               >
-                The Tenancy and Household Check for the tenancy at
-                , occupied by
-
+                The Tenancy and Household Check for the tenancy at 
+                , occupied by 
+                
                 , has been saved to your device ready to be sent to your manager for review.
               </p>
               <p
@@ -374,7 +374,7 @@ it("renders correctly when offline", async () => {
                 className="lbh-body"
               >
                 If you can't go online now, when you are next online
-
+                 
                 <strong>
                   on this device
                 </strong>
@@ -397,7 +397,7 @@ it("renders correctly when offline", async () => {
       <style
         jsx={true}
       >
-
+        
             :global(#main-content) {
               padding-top: 0;
             }
@@ -415,7 +415,7 @@ it("renders correctly when offline", async () => {
               margin-top: 0;
               margin-left: 2em;
             }
-
+          
       </style>,
     ]
   `);
