@@ -11,8 +11,6 @@ import {
 } from "remultiform/component-wrapper";
 import { ImageInput } from "../../components/ImageInput";
 import { makeSubmit } from "../../components/makeSubmit";
-import { makeUnableToEnterSubmit } from "../../components/makeUnableToEnterSubmit";
-import PreviousAttemptsAnnouncement from "../../components/PreviousAttemptsAnnouncement";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
@@ -20,12 +18,12 @@ import PageTitles from "../PageTitles";
 
 const step = {
   title: PageTitles.Outside,
-  heading: "Tenancy and Household Check",
+  heading: "Introductory Tenancy Visit",
   step: {
     slug: PageSlugs.Outside,
     nextSlug: PageSlugs.Start,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
-      makeUnableToEnterSubmit({
+      makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
         value: "Enter the property",
       }),
@@ -117,15 +115,6 @@ const step = {
           props: {
             level: HeadingLevels.H2,
             children: "What do you want to do next?",
-          },
-        })
-      ),
-      ComponentWrapper.wrapStatic(
-        new StaticComponent({
-          key: "previous-attempts",
-          Component: PreviousAttemptsAnnouncement,
-          props: {
-            summary: true,
           },
         })
       ),
