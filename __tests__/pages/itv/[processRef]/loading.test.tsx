@@ -1,7 +1,7 @@
 import * as router from "next/router";
 import React from "react";
 import { act, create, ReactTestRenderer } from "react-test-renderer";
-import LoadingPage from "../../../../pages/itv[processRef]/loading";
+import LoadingPage from "../../../../pages/itv/[processRef]/loading";
 import databaseSchemaVersion from "../../../../storage/databaseSchemaVersion";
 import { processStoreNames } from "../../../../storage/ProcessDatabaseSchema";
 import Storage from "../../../../storage/Storage";
