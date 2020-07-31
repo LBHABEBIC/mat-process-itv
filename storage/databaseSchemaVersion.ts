@@ -1,1 +1,1 @@
-export const databaseSchemaVersion = 1;
+export default 12;

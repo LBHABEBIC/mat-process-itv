@@ -1,12 +1,15 @@
 /* eslint-env node */
 require("dotenv/config");
+
 const express = require("express");
 const { readFileSync } = require("fs");
 const { join } = require("path");
 const nextjs = require("next");
-const basePath = require("../config/basePath");
+
 const nextConfig = require("../next.config");
+
 const api = require("./api");
+const basePath = require("./helpers/basePath");
 
 const dev = process.env.NODE_ENV !== "production";
 const port = parseInt(process.env.PORT || "3000");

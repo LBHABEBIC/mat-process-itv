@@ -1,9 +1,11 @@
 /* eslint-env node */
 require("dotenv/config");
+
 const withOffline = require("next-offline");
 const { join } = require("path");
-const basePath = require("./config/basePath");
+
 const findAllRoutes = require("./build/helpers/findAllRoutes");
+const basePath = require("./server/helpers/basePath");
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -13,6 +15,7 @@ const env = {
   ENVIRONMENT_NAME: process.env.ENVIRONMENT_NAME,
   PROCESS_NAME: process.env.PROCESS_NAME,
   WORKTRAY_URL: process.env.WORKTRAY_URL,
+  TENANCY_URL: process.env.TENANCY_URL,
   DIVERSITY_FORM_URL: process.env.DIVERSITY_FORM_URL,
   FEEDBACK_FORM_URL: process.env.FEEDBACK_FORM_URL,
 };

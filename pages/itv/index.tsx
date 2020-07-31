@@ -1,21 +1,18 @@
-import {
-  getProcessRef,
-  ON_SERVER,
-  useRedirectWhenOnline,
-} from "@hackney/mat-process-utils";
 import { Paragraph } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import basePath from "../../config/basePath";
-import { PageTitle } from "../../helpers/PageTitle";
-import { repeatingStepSlugs, Slug, stepSlugs } from "../../helpers/Slug";
-import { MainLayout } from "../../layouts/MainLayout";
+import getProcessRef from "../../helpers/getProcessRef";
+import isServer from "../../helpers/isServer";
+import useRedirectWhenOnline from "../../helpers/useRedirectWhenOnline";
+import MainLayout from "../../layouts/MainLayout";
+import PageSlugs from "../../steps/PageSlugs";
+import PageTitles from "../../steps/PageTitles";
 
 const useCacheQueryParameters = (): void => {
   const router = useRouter();
 
-  if (ON_SERVER) {
+  if (isServer) {
     return;
   }
 
@@ -25,6 +22,8 @@ const useCacheQueryParameters = (): void => {
     return;
   }
 
+  // `router.query` might be an empty object when first loading a page for
+  // some reason.
   let processApiJwt = router.query.processApiJwt as string | undefined;
   let matApiJwt = router.query.matApiJwt as string | undefined;
   let matApiData = router.query.data as string | undefined;
@@ -38,46 +37,34 @@ const useCacheQueryParameters = (): void => {
   }
 
   if (processApiJwt) {
-    sessionStorage.setItem(
-      `${basePath}/${processRef}:processApiJwt`,
-      processApiJwt
-    );
+    sessionStorage.setItem(`${processRef}:processApiJwt`, processApiJwt);
   } else {
-    sessionStorage.removeItem(`${basePath}/${processRef}:processApiJwt`);
+    sessionStorage.removeItem(`${processRef}:processApiJwt`);
   }
 
   if (matApiJwt) {
-    sessionStorage.setItem(`${basePath}/${processRef}:matApiJwt`, matApiJwt);
+    sessionStorage.setItem(`${processRef}:matApiJwt`, matApiJwt);
   } else {
-    sessionStorage.removeItem(`${basePath}/${processRef}:matApiJwt`);
+    sessionStorage.removeItem(`${processRef}:matApiJwt`);
   }
 
   if (matApiData) {
-    sessionStorage.setItem(`${basePath}/${processRef}:matApiData`, matApiData);
+    sessionStorage.setItem(`${processRef}:matApiData`, matApiData);
   } else {
-    sessionStorage.removeItem(`${basePath}/${processRef}:matApiData`);
+    sessionStorage.removeItem(`${processRef}:matApiData`);
   }
 
   if (processStage) {
-    sessionStorage.setItem(
-      `${basePath}/${processRef}:processStage`,
-      processStage
-    );
+    sessionStorage.setItem(`${processRef}:processStage`, processStage);
   } else {
-    sessionStorage.removeItem(`${basePath}/${processRef}:processStage`);
+    sessionStorage.removeItem(`${processRef}:processStage`);
   }
 };
 
 export const IndexPage: NextPage = () => {
   useCacheQueryParameters();
 
-  const online = useRedirectWhenOnline(
-    Slug.Loading,
-    basePath,
-    stepSlugs,
-    repeatingStepSlugs,
-    "replace"
-  );
+  const online = useRedirectWhenOnline(PageSlugs.Loading, "replace");
 
   let content: React.ReactNode;
 
@@ -104,7 +91,7 @@ export const IndexPage: NextPage = () => {
   }
 
   return (
-    <MainLayout title={PageTitle.Index} heading="Introductory tenancy visit">
+    <MainLayout title={PageTitles.Index} heading="Tenancy and Household Check">
       {content}
     </MainLayout>
   );

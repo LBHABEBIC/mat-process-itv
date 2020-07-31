@@ -1,8 +1,8 @@
 Feature: End to end
 
   As a user
-  I want to be able to perform an introductory tenancy visit
-  So that I can complete an introductory tenancy visit
+  I want to be able to perform a Tenancy and Household Check
+  So that I can check on a tenancy
 
   Scenario: Performing a check
     When I complete a process

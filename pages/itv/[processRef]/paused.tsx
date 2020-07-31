@@ -1,17 +1,16 @@
 import { Button, PageAnnouncement, Paragraph } from "lbh-frontend-react";
 import { NextPage } from "next";
 import React from "react";
-import processName from "../../../config/processName";
-import { PageTitle } from "../../../helpers/PageTitle";
-import { MainLayout } from "../../../layouts/MainLayout";
+import MainLayout from "../../../layouts/MainLayout";
+import PageTitles from "../../../steps/PageTitles";
 
 const PausedPage: NextPage = () => {
   return (
-    <MainLayout title={PageTitle.Paused}>
+    <MainLayout title={PageTitles.Paused}>
       <PageAnnouncement title="Process paused">
         <Paragraph>
-          The {processName} has been paused and saved to your work tray ready to
-          continue later.
+          The Tenancy and Household Check has been paused and saved to your work
+          tray ready to continue later.
         </Paragraph>
       </PageAnnouncement>
 

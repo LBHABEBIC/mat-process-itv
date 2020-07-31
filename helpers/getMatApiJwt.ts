@@ -1,11 +1,8 @@
-import { ON_SERVER } from "@hackney/mat-process-utils";
 import { nullAsUndefined } from "null-as-undefined";
-import basePath from "../config/basePath";
+import isServer from "./isServer";
 
-export const getMatApiJwt = (
-  processRef: string | undefined
-): string | undefined => {
-  if (ON_SERVER) {
+const getMatApiJwt = (processRef: string | undefined): string | undefined => {
+  if (isServer) {
     return;
   }
 
@@ -13,7 +10,7 @@ export const getMatApiJwt = (
     return;
   }
 
-  return nullAsUndefined(
-    sessionStorage.getItem(`${basePath}/${processRef}:matApiJwt`)
-  );
+  return nullAsUndefined(sessionStorage.getItem(`${processRef}:matApiJwt`));
 };
+
+export default getMatApiJwt;

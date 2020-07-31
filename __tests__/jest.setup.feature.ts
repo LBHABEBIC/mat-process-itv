@@ -1,9 +1,9 @@
 import { setJestCucumberConfiguration } from "jest-cucumber";
 import { logging } from "selenium-webdriver";
 import yn from "yn";
+
+import WebDriverWrapper from "./helpers/webdriver/WebDriverWrapper";
 import createTestProcess from "./helpers/createTestProcess";
-import { createWebDriverSingleton } from "./helpers/createWebDriverSingleton";
-import { destroyWebDriverSingleton } from "./helpers/destroyWebDriverSingleton";
 
 jest.setTimeout(60 * 1000);
 
@@ -14,7 +14,7 @@ if (yn(process.env.CI)) {
 setJestCucumberConfiguration({ loadRelativePath: true });
 
 beforeEach(async () => {
-  await createWebDriverSingleton();
+  await WebDriverWrapper.createSingleton();
   await createTestProcess();
 });
 
@@ -43,5 +43,5 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await destroyWebDriverSingleton();
+  await WebDriverWrapper.destroySingleton();
 });

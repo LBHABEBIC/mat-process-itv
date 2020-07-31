@@ -1,6 +1,7 @@
-import { Upgrade } from "remultiform";
-import { ExternalDatabaseSchema } from "../../../ExternalDatabaseSchema";
+import { Upgrade } from "remultiform/database";
+import ExternalDatabaseSchema from "../../../ExternalDatabaseSchema";
 
 export default (upgrade: Upgrade<ExternalDatabaseSchema["schema"]>): void => {
-  upgrade.createStore("officer");
+  upgrade.createStore("tenancy");
+  upgrade.createStore("residents");
 };
