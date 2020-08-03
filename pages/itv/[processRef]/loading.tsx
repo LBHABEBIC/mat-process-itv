@@ -493,10 +493,7 @@ export const LoadingPage: NextPage = () => {
   );
 
   return (
-    <MainLayout
-      title={PageTitles.Loading}
-      heading="Tenancy and Household Check"
-    >
+    <MainLayout title={PageTitles.Loading} heading="Introductory Tenancy Visit">
       <TenancySummary
         details={{
           address: residentData.result
