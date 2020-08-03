@@ -1,3 +1,4 @@
+import yesNoAppointmentRadios from "helpers/yesNoAppointmentRadios";
 import { FieldsetLegend, Link, Paragraph } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -17,19 +18,18 @@ import { RadioButtons } from "../../components/RadioButtons";
 import { ReviewNotes } from "../../components/ReviewNotes";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "needs-repairs": "Are there any new repairs queries?",
+  "needs-repairs": "Are there any outstanding repairs queries?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   title: PageTitles.Repairs,
-  heading: "New repairs",
+  heading: "Repairs",
   review: {
     rows: [
       {
@@ -94,7 +94,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             legend: (
               <FieldsetLegend>{questions["needs-repairs"]}</FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios,
+            radios: yesNoAppointmentRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -124,7 +124,10 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["needs-repairs"] === "yes";
+            return (
+              stepValues["needs-repairs"] === "yes booked" ||
+              stepValues["needs-repairs"] === "not booked"
+            );
           },
           defaultValue: [],
           emptyValue: [] as string[],
@@ -144,14 +147,17 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about repairs if necessary",
+              value: "Add appointment date and any notes about repairs",
             },
             name: "repairs-notes",
           } as PostVisitActionInputProps,
           renderWhen(stepValues: {
             "needs-repairs"?: ComponentValue<ProcessDatabaseSchema, "property">;
           }): boolean {
-            return stepValues["needs-repairs"] === "yes";
+            return (
+              stepValues["needs-repairs"] === "yes booked" ||
+              stepValues["needs-repairs"] === "not booked"
+            );
           },
           defaultValue: [] as Notes,
           emptyValue: [] as Notes,
