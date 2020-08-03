@@ -124,7 +124,7 @@ const ReviewPage: NextPage = () => {
   return (
     <MainLayout
       title={PageTitles.Review}
-      heading="Review Tenancy and Household Check"
+      heading="Review Introductory Tenancy Visit"
       pausable
     >
       <React.Fragment>
@@ -144,8 +144,8 @@ const ReviewPage: NextPage = () => {
         `}</style>
       </React.Fragment>
       <Paragraph>
-        The Tenancy and Household Check has now been completed. Please review
-        the answers with all present tenants and ask them to sign.
+        The Introductory Tenancy Visit has now been completed. Please review the
+        answers with all present tenants and ask them to sign.
       </Paragraph>
       <IdAndResidencyReviewSection tenants={tenantsWithPresentStatus} />
       <HouseholdReviewSection />
