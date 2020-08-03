@@ -69,6 +69,9 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
         disabled={disabled}
         rows={rows}
         value={currentNote?.value || ""}
+        formGroup={{
+          className: "postVisitActionInput",
+        }}
       />
       <LBHCheckboxes
         name={name}
@@ -113,6 +116,12 @@ export const PostVisitActionInput: React.FunctionComponent<PostVisitActionInputP
           />
         </Details>
       )}
+
+      <style jsx>{`
+        :global(.lbh-form-group.postVisitActionInput) {
+          margin: 20px 0;
+        }
+      `}</style>
     </>
   );
 };
