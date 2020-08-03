@@ -150,9 +150,6 @@ type ProcessDatabaseSchema = NamedSchema<
         documents: {
           images: string[];
         };
-        houseMovingSchemes: {
-          notes: Notes;
-        };
         memberChanges: {
           notes: Notes;
         };
@@ -461,10 +458,6 @@ export const processPostVisitActionMap: {
   },
   tenantsPresent: {},
   household: {
-    "houseMovingSchemes.notes": {
-      category: "17",
-      subcategory: "100000301",
-    },
     "memberChanges.notes": {
       category: "17",
       subcategory: "100000193",
