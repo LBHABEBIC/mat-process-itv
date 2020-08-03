@@ -1,12 +1,5 @@
 import formatDate from "date-fns/format";
-import {
-  Heading,
-  HeadingLevels,
-  Link,
-  List,
-  ListTypes,
-  Paragraph,
-} from "lbh-frontend-react/components";
+import { Heading, HeadingLevels } from "lbh-frontend-react/components";
 import { useRouter } from "next/router";
 import React from "react";
 import {
@@ -88,20 +81,6 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
         },
         images: "household-document-images",
       },
-      {
-        label: "Housing move schemes",
-        values: {
-          "house-moving-schemes": {
-            renderValue(notes: Notes): React.ReactNode {
-              if (notes.length === 0) {
-                return;
-              }
-
-              return <ReviewNotes notes={notes} />;
-            },
-          },
-        },
-      },
     ],
   },
   step: {
@@ -163,65 +142,6 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
             storeName: "household",
             key: keyFromSlug(),
             property: ["memberChanges", "notes"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "household">(
-        new StaticComponent({
-          key: "tenant-wants-to-move",
-          Component: Heading,
-          props: {
-            level: HeadingLevels.H2,
-            children: "Is the tenant interested in moving?",
-          },
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "house-moving-schemes",
-          Component: PostVisitActionInputDetails,
-          props: {
-            summary: "House moving schemes",
-            name: "house-moving-schemes-notes",
-            label: {
-              value: "Add note about any interest in housing move schemes",
-            },
-            contentBefore: (
-              <>
-                <Paragraph>
-                  {" "}
-                  <>
-                    <Link
-                      href="https://hackney.gov.uk/housing-moves"
-                      target="_blank"
-                    >
-                      Housing moves schemes:
-                    </Link>{" "}
-                  </>
-                  (online only, opens in a new tab) include:
-                </Paragraph>
-                <List
-                  type={ListTypes.Bullet}
-                  items={[
-                    <>Downsizing: a payment may be made for downsizing</>,
-                    <>Moving out of London</>,
-                    <>Mutual exchange</>,
-                    <>Overcrowding</>,
-                    <>Seaside and country homes if aged 60 or over</>,
-                  ]}
-                />
-              </>
-            ),
-          } as PostVisitActionInputDetailsProps,
-          defaultValue: [] as Notes,
-          emptyValue: [] as Notes,
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "household"
-          >({
-            storeName: "household",
-            key: keyFromSlug(),
-            property: ["houseMovingSchemes", "notes"],
           }),
         })
       ),
