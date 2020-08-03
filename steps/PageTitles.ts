@@ -21,7 +21,6 @@ enum PageTitles {
 
   // Household
   Household = "Household",
-  OtherProperty = "Other property",
   Rent = "Rent",
 
   // Property inspection

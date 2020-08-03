@@ -170,7 +170,7 @@ const useHouseholdStatus = (processRef: ProcessRef | undefined): Status => {
       }
 
       const household = householdSet[processRef];
-      const completedLastStep = household?.otherProperty !== undefined;
+      const completedLastStep = household?.rentArrears !== undefined;
 
       return completedLastStep;
     }
@@ -408,41 +408,49 @@ export const SectionsPage: NextPage = () => {
           <TaskList
             items={[
               {
-                name: "ID  and tenant information",
+                name: "ID and tenant information",
                 url: urlObjectForSlug(router, PageSlugs.PresentForCheck),
                 status: idAndResidencyStatus.status,
               },
               {
                 name: "Household",
                 url: urlObjectForSlug(router, PageSlugs.Household),
-                status:
-                  idAndResidencyStatus.status === TaskListStatus.Completed
-                    ? householdStatus.status
-                    : TaskListStatus.Unavailable,
+                // TODO: revert this change when the APIs are fixed
+                status: TaskListStatus.Started,
+                // status:
+                //   idAndResidencyStatus.status === TaskListStatus.Completed
+                //     ? householdStatus.status
+                //     : TaskListStatus.Unavailable,
               },
               {
                 name: "Property inspection",
                 url: urlObjectForSlug(router, PageSlugs.Rooms),
-                status:
-                  idAndResidencyStatus.status === TaskListStatus.Completed
-                    ? propertyInspectionStatus.status
-                    : TaskListStatus.Unavailable,
+                // TODO: revert this change when the APIs are fixed
+                status: TaskListStatus.Started,
+                // status:
+                //   idAndResidencyStatus.status === TaskListStatus.Completed
+                //     ? propertyInspectionStatus.status
+                //     : TaskListStatus.Unavailable,
               },
               {
                 name: "Wellbeing support",
                 url: urlObjectForSlug(router, PageSlugs.HomeCheck),
-                status:
-                  idAndResidencyStatus.status === TaskListStatus.Completed
-                    ? wellbeingSupportStatus.status
-                    : TaskListStatus.Unavailable,
+                // TODO: revert this change when the APIs are fixed
+                status: TaskListStatus.Started,
+                // status:
+                //   idAndResidencyStatus.status === TaskListStatus.Completed
+                //     ? wellbeingSupportStatus.status
+                //     : TaskListStatus.Unavailable,
               },
               {
                 name: "Review and submit",
                 url: urlObjectForSlug(router, PageSlugs.Review),
-                status:
-                  idAndResidencyStatus.status === TaskListStatus.Completed
-                    ? TaskListStatus.NotStarted
-                    : TaskListStatus.Unavailable,
+                // TODO: revert this change when the APIs are fixed
+                status: TaskListStatus.Started,
+                // status:
+                //   idAndResidencyStatus.status === TaskListStatus.Completed
+                //     ? TaskListStatus.NotStarted
+                //     : TaskListStatus.Unavailable,
               },
             ]}
           />
