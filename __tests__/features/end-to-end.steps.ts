@@ -13,15 +13,7 @@ const processData = {
     outside: {
       images: [imagePath],
     },
-    rooms: {
-      canEnterAll: "no",
-      notes: [
-        {
-          value: "Room notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
+
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",
@@ -838,23 +830,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit({ css: '[href$="/rooms"]' });
 
-      // Rooms page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/rooms`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `can-enter-all-rooms-${processData.property.rooms.canEnterAll}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "room-entry-notes",
-        })
-      ).sendKeys(processData.property.rooms.notes[0].value);
-
-      await browser!.submit();
+      // Rooms page removed
 
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(

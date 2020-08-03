@@ -30,10 +30,7 @@ type ProcessDatabaseSchema = NamedSchema<
         outside: {
           images: string[];
         };
-        rooms: {
-          canEnterAll: string;
-          notes: Notes;
-        };
+
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -321,7 +318,6 @@ export const processNotesPaths: {
   lastModified: [],
   submitted: [],
   property: [
-    "rooms.notes",
     "laminatedFlooring.notes",
     "structuralChanges.notes",
     "damage.notes",
@@ -375,10 +371,6 @@ export const processPostVisitActionMap: {
   lastModified: {},
   submitted: {},
   property: {
-    "room.notes": {
-      category: "20",
-      subcategory: "100000170",
-    },
     "laminatedFlooring.notes": {
       category: "20",
       subcategory: "100000184",

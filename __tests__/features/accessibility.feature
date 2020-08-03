@@ -106,12 +106,7 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
-  Scenario: Rooms page is accessible
-    When I start the process
-    And I wait for the data to be fetched
-    And I visit /rooms for the process
-    Then the page should be accessible
-    And the page should have a descriptive title
+  
 
   Scenario: Laminated flooring page is accessible
     When I start the process
