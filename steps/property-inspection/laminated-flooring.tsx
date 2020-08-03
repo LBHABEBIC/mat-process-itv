@@ -24,7 +24,8 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "has-laminated-flooring": "Is there any laminated flooring in the property?",
+  "has-laminated-flooring":
+    "Is there laminated flooring in the property or is the tenant considering installing laminated flooring?",
   "has-permission": "Is there permission for laminated flooring?",
 };
 
