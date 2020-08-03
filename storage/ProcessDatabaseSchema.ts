@@ -168,13 +168,6 @@ type ProcessDatabaseSchema = NamedSchema<
       };
     };
 
-    homeCheck: {
-      key: ProcessRef;
-      value: {
-        value: string;
-      };
-    };
-
     healthConcerns: {
       key: ProcessRef;
       value: {
