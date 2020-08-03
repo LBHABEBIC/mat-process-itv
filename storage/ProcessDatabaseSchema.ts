@@ -168,10 +168,6 @@ type ProcessDatabaseSchema = NamedSchema<
           wantsToContact: string;
           notes: Notes;
         };
-        otherProperty: {
-          hasOtherProperty: string;
-          notes: Notes;
-        };
       };
     };
 
@@ -351,7 +347,6 @@ export const processNotesPaths: {
     "rentArrears.notes",
     "housingBenefits.notes",
     "incomeOfficer.notes",
-    "otherProperty.notes",
   ],
   homeCheck: [],
   healthConcerns: ["notes"],
@@ -480,10 +475,6 @@ export const processPostVisitActionMap: {
     "incomeOfficer.notes": {
       category: "17",
       subcategory: "100000215",
-    },
-    "otherProperty.notes": {
-      category: "17",
-      subcategory: "100000204",
     },
   },
   supportNeeds: {
