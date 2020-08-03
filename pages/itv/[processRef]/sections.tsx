@@ -170,7 +170,7 @@ const useHouseholdStatus = (processRef: ProcessRef | undefined): Status => {
       }
 
       const household = householdSet[processRef];
-      const completedLastStep = household?.otherProperty !== undefined;
+      const completedLastStep = household?.rentArrears !== undefined;
 
       return completedLastStep;
     }

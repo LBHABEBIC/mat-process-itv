@@ -25,7 +25,6 @@ enum PageSlugs {
   // Household
   Household = "household",
   Rent = "rent",
-  OtherProperty = "other-property",
 
   // Property inspection
   AboutProperty = "about-property",
@@ -92,7 +91,6 @@ const slugs: {
   "other-support": true,
   household: true,
   rent: true,
-  "other-property": true,
   "about-property": true,
   rooms: true,
   "laminated-flooring": true,

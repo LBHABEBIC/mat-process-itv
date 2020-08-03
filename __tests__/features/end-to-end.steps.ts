@@ -255,15 +255,6 @@ const processData = {
         },
       ],
     },
-    otherProperty: {
-      hasOtherProperty: "yes",
-      notes: [
-        {
-          value: "Other property notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
   },
   homeCheck: {
     value: "yes",
@@ -837,22 +828,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await browser!.submit();
 
       // Other property page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/other-property`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `has-other-property-${processData.household.otherProperty.hasOtherProperty}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "other-property-notes",
-        })
-      ).sendKeys(processData.household.otherProperty.notes[0].value);
-
-      await browser!.submit();
 
       // Sections page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
