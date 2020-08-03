@@ -1,11 +1,9 @@
 import { NamedSchema, StoreNames } from "remultiform/database";
 import { ProcessRef } from "./ProcessDatabaseSchema";
 import { ResidentRef } from "./ResidentDatabaseSchema";
-
 export const externalDatabaseName = `mat-process-${
   process.env.PROCESS_NAME
 }-external-${process.env.ENVIRONMENT_NAME || "unknown"}`;
-
 type ExternalDatabaseSchema = NamedSchema<
   typeof externalDatabaseName,
   2,
@@ -18,7 +16,6 @@ type ExternalDatabaseSchema = NamedSchema<
         currentBalance: string;
       };
     };
-
     residents: {
       key: ProcessRef;
       value: {
@@ -36,7 +33,6 @@ type ExternalDatabaseSchema = NamedSchema<
         }[];
       };
     };
-
     officer: {
       key: ProcessRef;
       value: {
@@ -45,7 +41,6 @@ type ExternalDatabaseSchema = NamedSchema<
     };
   }
 >;
-
 const storeNames: {
   [Name in StoreNames<ExternalDatabaseSchema["schema"]>]: boolean;
 } = {
@@ -53,7 +48,6 @@ const storeNames: {
   residents: true,
   officer: true,
 };
-
 export const externalStoreNames = Object.entries(storeNames)
   .filter(([, include]) => include)
   .reduce(
@@ -63,5 +57,4 @@ export const externalStoreNames = Object.entries(storeNames)
     ],
     [] as StoreNames<ExternalDatabaseSchema["schema"]>[]
   );
-
 export default ExternalDatabaseSchema;
