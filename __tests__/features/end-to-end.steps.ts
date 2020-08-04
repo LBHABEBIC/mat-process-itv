@@ -31,6 +31,16 @@ const processData = {
         },
       ],
     },
+    gas: {
+      hasBoilerChecked: "yesTenantHasCertificate",
+      images: [imagePath],
+      notes: [
+        {
+          value: "Gas boiler notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",

@@ -34,6 +34,12 @@ type ProcessDatabaseSchema = NamedSchema<
           isPropertyOccupied: string;
           notes: Notes;
         };
+        gas: {
+          hasBoilerChecked: string;
+          images: string[];
+          date: string;
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
