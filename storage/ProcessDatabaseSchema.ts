@@ -285,7 +285,6 @@ const storeNames: {
   isVisitInside: true,
   tenantsPresent: true,
   household: true,
-  homeCheck: true,
   healthConcerns: true,
   disability: true,
   supportNeeds: true,
@@ -338,7 +337,6 @@ export const processNotesPaths: {
     "housingBenefits.notes",
     "incomeOfficer.notes",
   ],
-  homeCheck: [],
   healthConcerns: ["notes"],
   disability: ["notes"],
   supportNeeds: [
@@ -499,7 +497,6 @@ export const processPostVisitActionMap: {
       subcategory: "100000560",
     },
   },
-  homeCheck: {},
   healthConcerns: {
     notes: {
       category: "23",
