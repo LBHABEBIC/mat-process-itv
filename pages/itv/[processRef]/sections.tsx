@@ -415,42 +415,34 @@ export const SectionsPage: NextPage = () => {
               {
                 name: "Household",
                 url: urlObjectForSlug(router, PageSlugs.Household),
-                // TODO: revert this change when the APIs are fixed
-                status: TaskListStatus.Started,
-                // status:
-                //   idAndResidencyStatus.status === TaskListStatus.Completed
-                //     ? householdStatus.status
-                //     : TaskListStatus.Unavailable,
+                status:
+                  idAndResidencyStatus.status === TaskListStatus.Completed
+                    ? householdStatus.status
+                    : TaskListStatus.Unavailable,
               },
               {
                 name: "Property inspection",
                 url: urlObjectForSlug(router, PageSlugs.Rooms),
-                // TODO: revert this change when the APIs are fixed
-                status: TaskListStatus.Started,
-                // status:
-                //   idAndResidencyStatus.status === TaskListStatus.Completed
-                //     ? propertyInspectionStatus.status
-                //     : TaskListStatus.Unavailable,
+                status:
+                  idAndResidencyStatus.status === TaskListStatus.Completed
+                    ? propertyInspectionStatus.status
+                    : TaskListStatus.Unavailable,
               },
               {
                 name: "Wellbeing support",
                 url: urlObjectForSlug(router, PageSlugs.Health),
-                // TODO: revert this change when the APIs are fixed
-                status: TaskListStatus.Started,
-                // status:
-                //   idAndResidencyStatus.status === TaskListStatus.Completed
-                //     ? wellbeingSupportStatus.status
-                //     : TaskListStatus.Unavailable,
+                status:
+                  idAndResidencyStatus.status === TaskListStatus.Completed
+                    ? wellbeingSupportStatus.status
+                    : TaskListStatus.Unavailable,
               },
               {
                 name: "Review and submit",
                 url: urlObjectForSlug(router, PageSlugs.Review),
-                // TODO: revert this change when the APIs are fixed
-                status: TaskListStatus.Started,
-                // status:
-                //   idAndResidencyStatus.status === TaskListStatus.Completed
-                //     ? TaskListStatus.NotStarted
-                //     : TaskListStatus.Unavailable,
+                status:
+                  idAndResidencyStatus.status === TaskListStatus.Completed
+                    ? TaskListStatus.NotStarted
+                    : TaskListStatus.Unavailable,
               },
             ]}
           />
