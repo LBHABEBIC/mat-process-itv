@@ -1,6 +1,5 @@
 import antisocialBehaviour from "./antisocial-behaviour";
 import communalAreas from "./communal-areas";
-import damage from "./damage";
 import doorMats from "./door-mats";
 import fireExit from "./fire-exit";
 import garden from "./garden";
@@ -20,7 +19,6 @@ export default [
   rooms,
   laminatedFlooring,
   structuralChanges,
-  damage,
   roof,
   loft,
   garden,

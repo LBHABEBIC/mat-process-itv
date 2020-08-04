@@ -44,16 +44,7 @@ const processData = {
         },
       ],
     },
-    damage: {
-      hasDamage: "yes",
-      images: [imagePath],
-      notes: [
-        {
-          value: "Damage notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
+
     roof: {
       hasAccess: "yes",
       itemsStoredOnRoof: "yes",
@@ -912,28 +903,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
-      // Damage page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/damage`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `has-damage-${processData.property.damage.hasDamage}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "damage-images",
-        })
-      ).sendKeys(processData.property.damage.images[0]);
-      (
-        await browser!.waitForEnabledElement({
-          name: "damage-notes",
-        })
-      ).sendKeys(processData.property.damage.notes[0].value);
-
-      await browser!.submit();
+      // Damage page deleted
 
       // Roof page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
