@@ -30,10 +30,6 @@ type ProcessDatabaseSchema = NamedSchema<
         outside: {
           images: string[];
         };
-        rooms: {
-          canEnterAll: string;
-          notes: Notes;
-        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -317,7 +313,6 @@ export const processNotesPaths: {
   lastModified: [],
   submitted: [],
   property: [
-    "rooms.notes",
     "laminatedFlooring.notes",
     "structuralChanges.notes",
     "damage.notes",
