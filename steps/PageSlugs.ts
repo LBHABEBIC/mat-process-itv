@@ -31,6 +31,7 @@ enum PageSlugs {
   LaminatedFlooring = "laminated-flooring",
   StructuralChanges = "structural-changes",
   Damage = "damage",
+
   Roof = "roof",
   Loft = "loft",
   Garden = "garden",
@@ -46,7 +47,6 @@ enum PageSlugs {
   OtherComments = "other-comments",
 
   // Wellbeing support
-  HomeCheck = "home-check",
   Health = "health",
   Disability = "disability",
   SupportNeeds = "support-needs",
@@ -107,7 +107,6 @@ const slugs: {
   pets: true,
   "antisocial-behaviour": true,
   "other-comments": true,
-  "home-check": true,
   health: true,
   disability: false,
   "support-needs": true,

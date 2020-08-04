@@ -484,9 +484,10 @@ export const LoadingPage: NextPage = () => {
   );
 
   const button = (
-    // TODO: revert this change when the APIs are fixed
-    // <Button disabled={!ready && !href.pathname || !as.pathname} data-testid="submit">
-    <Button disabled={!href.pathname || !as.pathname} data-testid="submit">
+    <Button
+      disabled={(!ready && !href.pathname) || !as.pathname}
+      data-testid="submit"
+    >
       {ready ? "Go" : "Loading..."}
     </Button>
   );
