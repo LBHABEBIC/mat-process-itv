@@ -30,6 +30,10 @@ type ProcessDatabaseSchema = NamedSchema<
         outside: {
           images: string[];
         };
+        propertyOccupied: {
+          isPropertyOccupied: string;
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -281,7 +285,6 @@ const storeNames: {
   isVisitInside: true,
   tenantsPresent: true,
   household: true,
-  homeCheck: true,
   healthConcerns: true,
   disability: true,
   supportNeeds: true,
@@ -306,6 +309,7 @@ export const processNotesPaths: {
   lastModified: [],
   submitted: [],
   property: [
+    "propertyOccupied.notes",
     "laminatedFlooring.notes",
     "structuralChanges.notes",
     "damage.notes",
@@ -333,7 +337,6 @@ export const processNotesPaths: {
     "housingBenefits.notes",
     "incomeOfficer.notes",
   ],
-  homeCheck: [],
   healthConcerns: ["notes"],
   disability: ["notes"],
   supportNeeds: [
@@ -358,9 +361,9 @@ export const processPostVisitActionMap: {
   lastModified: {},
   submitted: {},
   property: {
-    "room.notes": {
+    "propertyOccupied.notes": {
       category: "20",
-      subcategory: "100000170",
+      subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
     },
     "laminatedFlooring.notes": {
       category: "20",
@@ -494,7 +497,6 @@ export const processPostVisitActionMap: {
       subcategory: "100000560",
     },
   },
-  homeCheck: {},
   healthConcerns: {
     notes: {
       category: "23",

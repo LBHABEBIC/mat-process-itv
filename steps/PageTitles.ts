@@ -26,6 +26,7 @@ enum PageTitles {
   // Property inspection
   AboutProperty = "About property",
   Rooms = "Rooms",
+  PropertyOccupation = "Property occupation",
   LaminatedFlooring = "Laminated flooring",
   StructuralChanges = "Structural changes",
   Damage = "Damage",

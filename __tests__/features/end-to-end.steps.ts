@@ -22,6 +22,15 @@ const processData = {
         },
       ],
     },
+    propertyOccupied: {
+      isPropertyOccupied: "yes",
+      notes: [
+        {
+          value: "Property occupied notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",
@@ -726,11 +735,15 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       );
 
       await browser!.waitForEnabledElement(
-        { css: '[href$="/household"]' },
+        {
+          css: '[href$="/household"]',
+        },
         10000
       );
 
-      await browser!.submit({ css: '[href$="/household"]' });
+      await browser!.submit({
+        css: '[href$="/household"]',
+      });
 
       // Household page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -836,9 +849,29 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.waitForEnabledElement({ css: '[href$="/rooms"]' }, 10000);
 
-      await browser!.submit({ css: '[href$="/rooms"]' });
+      await browser!.submit({
+        css: '[href$="/rooms"]',
+      });
 
       // Rooms page deleted
+
+      // Property occupation page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/property-occupation`
+      );
+
+      (
+        await browser!.waitForEnabledElement({
+          id: `is-property-occupied-${processData.property.propertyOccupied.isPropertyOccupied}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "property-occupied-notes",
+        })
+      ).sendKeys(processData.property.propertyOccupied.notes[0].value);
+
+      await browser!.submit();
 
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -847,7 +880,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasLaminatedFlooring}`,
+          id: `is-property-occupied-${processData.property.propertyOccupied.isPropertyOccupied}`,
         })
       ).click();
       (
@@ -1237,11 +1270,15 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       );
 
       await browser!.waitForEnabledElement(
-        { css: '[href$="/home-check"]' },
+        {
+          css: '[href$="/home-check"]',
+        },
         10000
       );
 
-      await browser!.submit({ css: '[href$="/home-check"]' });
+      await browser!.submit({
+        css: '[href$="/home-check"]',
+      });
 
       // Home check page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -1434,7 +1471,9 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.waitForEnabledElement({ css: '[href$="/review"]' }, 10000);
 
-      await browser!.submit({ css: '[href$="/review"]' });
+      await browser!.submit({
+        css: '[href$="/review"]',
+      });
 
       // Review page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
