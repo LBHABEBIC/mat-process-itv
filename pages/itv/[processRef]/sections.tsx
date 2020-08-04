@@ -216,7 +216,7 @@ const usePropertyInspectionStatus = (
       }
 
       const property = propertySet[processRef];
-      const completedFirstStep = property?.rooms !== undefined;
+      const completedFirstStep = property?.laminatedFlooring !== undefined; //TODO change to correct page
 
       return completedFirstStep;
     }
@@ -422,7 +422,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Property inspection",
-                url: urlObjectForSlug(router, PageSlugs.Rooms),
+                url: urlObjectForSlug(router, PageSlugs.LaminatedFlooring),
                 status:
                   idAndResidencyStatus.status === TaskListStatus.Completed
                     ? propertyInspectionStatus.status
