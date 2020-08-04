@@ -44,7 +44,6 @@ enum PageTitles {
   OtherComments = "Other comments",
 
   // Wellbeing support
-  HomeCheck = "Home check",
   Health = "Health",
   Disability = "Disability",
   SupportNeeds = "Support needs",

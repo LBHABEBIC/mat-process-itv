@@ -47,7 +47,6 @@ enum PageSlugs {
   OtherComments = "other-comments",
 
   // Wellbeing support
-  HomeCheck = "home-check",
   Health = "health",
   Disability = "disability",
   SupportNeeds = "support-needs",
