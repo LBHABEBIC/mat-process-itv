@@ -28,6 +28,7 @@ enum PageSlugs {
 
   // Property inspection
   AboutProperty = "about-property",
+  PropertyOccupation = "property-occupation",
   LaminatedFlooring = "laminated-flooring",
   StructuralChanges = "structural-changes",
   Damage = "damage",

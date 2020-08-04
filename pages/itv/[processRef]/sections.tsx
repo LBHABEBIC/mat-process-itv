@@ -422,7 +422,7 @@ export const SectionsPage: NextPage = () => {
               },
               {
                 name: "Property inspection",
-                url: urlObjectForSlug(router, PageSlugs.LaminatedFlooring),
+                url: urlObjectForSlug(router, PageSlugs.PropertyOccupation),
                 status:
                   idAndResidencyStatus.status === TaskListStatus.Completed
                     ? propertyInspectionStatus.status
