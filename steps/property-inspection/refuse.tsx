@@ -3,6 +3,7 @@ import {
   Paragraph,
   Heading,
   HeadingLevels,
+  Link,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -91,7 +92,18 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-2",
           Component: Paragraph,
           props: {
-            children: `Food waste bins can be ordered via 020 8356 6688 or [Council's website] (online only, opens in new tab)`,
+            children: (
+              <>
+                Food waste bins can be ordered via 020 8356 6688 or{" "}
+                <Link
+                  href="https://hackney.gov.uk/order-recycling-products"
+                  target="_blank"
+                >
+                  Council&apos;s website
+                </Link>{" "}
+                (online only, opens in new tab).
+              </>
+            ),
           },
         })
       ),
