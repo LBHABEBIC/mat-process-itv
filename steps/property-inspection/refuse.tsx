@@ -166,14 +166,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "refuse-notes",
           Component: PostVisitActionInput,
           props: {
-            label: {
-              value: (
-                <>
-                  Add note about antisocial behaviour <b>by</b> or{" "}
-                  <b>against</b> tenant if necessary.
-                </>
-              ),
-            },
+            label: { value: "Add note if necessary" },
             name: "refuse-notes",
           } as PostVisitActionInputProps,
           defaultValue: [] as Notes,
