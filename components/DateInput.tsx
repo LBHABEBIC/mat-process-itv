@@ -11,7 +11,6 @@ type Props = DynamicComponentControlledProps<{
 };
 
 export const DateInput = (props: Props): React.ReactElement => {
-  console.log("DateInputprops", props);
   const { name, value: date, onValueChange, disabled } = props;
   const dayInputName = `${name}-day`;
   const dayLabelId = `${dayInputName}-label`;
