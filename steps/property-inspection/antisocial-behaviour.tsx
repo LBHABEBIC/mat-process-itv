@@ -80,7 +80,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
-          key: "paragraph-1",
+          key: "paragraph-2",
           Component: Paragraph,
           props: {
             children: `Antisocial behaviour is defined as "behaviour by a
@@ -92,7 +92,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
-          key: "paragraph-2",
+          key: "paragraph-3",
           Component: Paragraph,
           props: {
             children: `Examples include:`,
@@ -101,7 +101,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
-          key: "paragraph-2-list",
+          key: "paragraph-3-list",
           Component: List,
           props: {
             items: [
@@ -142,7 +142,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
       ),
       ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
         new StaticComponent({
-          key: "paragraph-3",
+          key: "paragraph-4",
           Component: Paragraph,
           props: {
             children: `Explain about antisocial behaviour and give examples.`,
