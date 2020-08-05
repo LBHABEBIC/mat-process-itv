@@ -68,6 +68,7 @@ defineFeature(loadFeature("./accessibility.feature"), (test) => {
   testAccessibility(test, "Other property");
   testAccessibility(test, "Rooms");
   testAccessibility(test, "Property occupation");
+  testAccessibility(test, "Gas");
   testAccessibility(test, "Laminated flooring");
   testAccessibility(test, "Structural changes");
   testAccessibility(test, "Damage");
