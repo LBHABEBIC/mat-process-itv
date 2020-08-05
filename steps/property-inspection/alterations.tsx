@@ -8,6 +8,7 @@ import {
   ComponentDatabaseMap,
   ComponentWrapper,
   DynamicComponent,
+  StaticComponent,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
@@ -24,6 +25,7 @@ import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
+import { Paragraph, Link } from "lbh-frontend-react/components";
 
 const questions = {
   "has-alterations": "Have any alterations been made to the property?",
@@ -64,6 +66,33 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
         value: "Save and continue",
       }),
     componentWrappers: [
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
+        new StaticComponent({
+          key: "paragraph-1",
+          Component: Paragraph,
+          props: {
+            children: `Explain the alterations procedure and that written permission is required before any alterations or improvements cannot be carried out.`,
+          },
+        })
+      ),
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
+        new StaticComponent({
+          key: "paragraph-2",
+          Component: Paragraph,
+          props: {
+            children: (
+              //TODO add correct url
+              <>
+                Information about alterations is in{" "}
+                <Link href={""} target="_blank">
+                  [Your Tenancy conditions: section 4.19]
+                </Link>{" "}
+                (online only, opens in a new tab)
+              </>
+            ),
+          },
+        })
+      ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
           key: "has-alterations;",
@@ -97,7 +126,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about alterations made to porperty by tenant.",
+              value: "Add note about alterations made to property by tenant.",
             },
             name: "alterations-notes",
           } as PostVisitActionInputProps,
