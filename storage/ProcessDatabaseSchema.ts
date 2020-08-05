@@ -121,6 +121,11 @@ type ProcessDatabaseSchema = NamedSchema<
           tenantUnderstands: string;
           notes: Notes;
         };
+        refuse: {
+          tenantKnowsAboutRefuse: string;
+          tenantHasFoodBin: string;
+          notes: Notes;
+        };
         otherComments: {
           images: string[];
           notes: Notes;
@@ -330,6 +335,7 @@ export const processNotesPaths: {
     "communalAreas.notes",
     "pets.notes",
     "antisocialBehaviour.notes",
+    "refuse.notes",
     "otherComments.notes",
   ],
   isUnannouncedVisit: ["notes"],
@@ -433,6 +439,10 @@ export const processPostVisitActionMap: {
     "antisocialBehaviour.notes": {
       category: "23",
       subcategory: "100000302",
+    },
+    "refuse.notes": {
+      category: "23",
+      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
     },
     "otherComments.notes": {
       category: "20",

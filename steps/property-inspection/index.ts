@@ -15,6 +15,7 @@ import storingMaterials from "./storing-materials";
 import structuralChanges from "./structural-changes";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
+import refuse from "./refuse";
 
 export default [
   propertyOccupation,
@@ -33,5 +34,6 @@ export default [
   communalAreas,
   pets,
   antisocialBehaviour,
+  refuse,
   otherComments,
 ];
