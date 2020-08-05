@@ -46,11 +46,6 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
           notes: Notes;
         };
-        damage: {
-          hasDamage: string;
-          images: string[];
-          notes: Notes;
-        };
         repairs: {
           needsRepairs: string;
           images: string[];
@@ -312,7 +307,6 @@ export const processNotesPaths: {
     "propertyOccupied.notes",
     "laminatedFlooring.notes",
     "structuralChanges.notes",
-    "damage.notes",
     "repairs.notes",
     "roof.notes",
     "loft.notes",

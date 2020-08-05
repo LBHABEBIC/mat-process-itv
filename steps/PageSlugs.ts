@@ -31,8 +31,6 @@ enum PageSlugs {
   PropertyOccupation = "property-occupation",
   LaminatedFlooring = "laminated-flooring",
   StructuralChanges = "structural-changes",
-  Damage = "damage",
-
   Roof = "roof",
   Loft = "loft",
   Garden = "garden",
@@ -94,7 +92,6 @@ const slugs: {
   "about-property": true,
   "laminated-flooring": true,
   "structural-changes": true,
-  damage: true,
   roof: true,
   loft: true,
   garden: true,
