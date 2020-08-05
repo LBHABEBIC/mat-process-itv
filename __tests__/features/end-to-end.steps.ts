@@ -42,13 +42,12 @@ const processData = {
         },
       ],
     },
-    structuralChanges: {
-      hasStructuralChanges: "yes",
-      changesAuthorised: "yes",
+    alterations: {
+      hasAlterations: "yes",
       images: [imagePath],
       notes: [
         {
-          value: "Structural changes notes",
+          value: "Alterations notes",
           isPostVisitAction: false,
         },
       ],
@@ -864,6 +863,24 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
+      // Alterations page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/alterations`
+      );
+
+      (
+        await browser!.waitForEnabledElement({
+          id: `has-alterations-${processData.property.alterations.hasAlterations}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "alterations-notes",
+        })
+      ).sendKeys(processData.property.propertyOccupied.notes[0].value);
+
+      await browser!.submit();
+
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/laminated-flooring`
@@ -871,12 +888,12 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       (
         await browser!.waitForEnabledElement({
-          id: `is-property-occupied-${processData.property.propertyOccupied.isPropertyOccupied}`,
+          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasLaminatedFlooring}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `has-permission-${processData.property.laminatedFlooring.hasPermission}`,
+          id: `has-laminated-flooring-${processData.property.laminatedFlooring.hasPermission}`,
         })
       ).click();
       (
@@ -892,31 +909,26 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
-      // Structural changes page
+      // Alterations changes page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/structural-changes`
+        `${processRef}/alterations`
       );
 
       (
         await browser!.waitForEnabledElement({
-          id: `has-structural-changes-${processData.property.structuralChanges.hasStructuralChanges}`,
+          id: `has-alterations-${processData.property.alterations.hasAlterations}`,
         })
       ).click();
       (
         await browser!.waitForEnabledElement({
-          id: `changes-authorised-${processData.property.structuralChanges.changesAuthorised}`,
+          name: "alterations-images",
         })
-      ).click();
+      ).sendKeys(processData.property.alterations.images[0]);
       (
         await browser!.waitForEnabledElement({
-          name: "structural-changes-images",
+          name: "alterations-notes",
         })
-      ).sendKeys(processData.property.structuralChanges.images[0]);
-      (
-        await browser!.waitForEnabledElement({
-          name: "structural-changes-notes",
-        })
-      ).sendKeys(processData.property.structuralChanges.notes[0].value);
+      ).sendKeys(processData.property.alterations.notes[0].value);
 
       await browser!.submit();
 
@@ -1472,7 +1484,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       // Review page - Property inspection section
       await Expect.pageToContain("Room notes");
       await Expect.pageToContain("Laminated flooring notes");
-      await Expect.pageToContain("Structural changes notes");
+      await Expect.pageToContain("Alterations notes");
       await Expect.pageToContain("Damage notes");
       await Expect.pageToContain("Roof notes");
       await Expect.pageToContain("Loft notes");

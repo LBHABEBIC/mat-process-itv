@@ -28,7 +28,7 @@ enum PageTitles {
   Rooms = "Rooms",
   PropertyOccupation = "Property occupation",
   LaminatedFlooring = "Laminated flooring",
-  StructuralChanges = "Structural changes",
+  Alterations = "Alterations",
   Damage = "Damage",
   Roof = "Roof",
   Loft = "Loft",

@@ -4,6 +4,7 @@ import doorMats from "./door-mats";
 import fireExit from "./fire-exit";
 import garden from "./garden";
 import laminatedFlooring from "./laminated-flooring";
+import alterations from "./alterations";
 import loft from "./loft";
 import metalGates from "./metal-gates";
 import otherComments from "./other-comments";
@@ -12,13 +13,12 @@ import repairs from "./repairs";
 import roof from "./roof";
 import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
-import structuralChanges from "./structural-changes";
 import propertyOccupation from "./property-occupation";
 
 export default [
   propertyOccupation,
   laminatedFlooring,
-  structuralChanges,
+  alterations,
   roof,
   loft,
   garden,
