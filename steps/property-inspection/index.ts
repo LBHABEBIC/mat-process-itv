@@ -14,9 +14,11 @@ import roof from "./roof";
 import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
+import gas from "./gas";
 
 export default [
   propertyOccupation,
+  gas,
   laminatedFlooring,
   alterations,
   roof,

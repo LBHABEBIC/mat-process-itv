@@ -34,6 +34,16 @@ type ProcessDatabaseSchema = NamedSchema<
           isPropertyOccupied: string;
           notes: Notes;
         };
+        gas: {
+          hasBoilerChecked: string;
+          images: string[];
+          visitDate: {
+            day: string;
+            month: string;
+            year: string;
+          };
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -304,6 +314,7 @@ export const processNotesPaths: {
   submitted: [],
   property: [
     "propertyOccupied.notes",
+    "gas.notes",
     "laminatedFlooring.notes",
     "alterations.notes",
     "repairs.notes",
@@ -355,6 +366,10 @@ export const processPostVisitActionMap: {
   submitted: {},
   property: {
     "propertyOccupied.notes": {
+      category: "20",
+      subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
+    },
+    "gas.notes": {
       category: "20",
       subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
     },
