@@ -93,6 +93,8 @@ const slugs: {
   household: true,
   rent: true,
   "about-property": true,
+  "property-occupation": true,
+  gas: true,
   "laminated-flooring": true,
   "structural-changes": true,
   damage: true,

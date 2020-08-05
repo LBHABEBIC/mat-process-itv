@@ -27,6 +27,7 @@ import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
+import { DateInput } from "components/DateInput";
 
 const questions = {
   "has-boiler-checked":
@@ -154,7 +155,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               stepValues["has-boiler-checked"] === "yesTenantHasCertificate" ||
               stepValues["has-boiler-checked"] ===
                 "yesTenantDoesNotHaveCertificate" ||
-              stepValues["has-boiler-checked"] === "noVisitArranged"
+              stepValues["has-boiler-checked"] === "noVisitArranged" ||
+              stepValues["has-boiler-checked"] === "noAppointmentArranged"
             );
           },
         })
@@ -175,10 +177,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             >;
           }): boolean {
             return (
-              stepValues["has-boiler-checked"] === "yesTenantHasCertificate" ||
-              stepValues["has-boiler-checked"] ===
-                "yesTenantDoesNotHaveCertificate" ||
-              stepValues["has-boiler-checked"] === "noVisitArranged"
+              stepValues["has-boiler-checked"] === "yesTenantHasCertificate"
             );
           },
           defaultValue: [],
@@ -190,6 +189,61 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             storeName: "property",
             key: keyFromSlug(),
             property: ["gas", "images"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
+        new StaticComponent({
+          key: "heading-3",
+          Component: Heading,
+          props: {
+            level: HeadingLevels.H4,
+            children: `Date of visit eg 01/07/2018`,
+          },
+          renderWhen(stepValues: {
+            "has-boiler-checked"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
+          }): boolean {
+            return (
+              stepValues["has-boiler-checked"] === "yesTenantHasCertificate" ||
+              stepValues["has-boiler-checked"] ===
+                "yesTenantDoesNotHaveCertificate" ||
+              stepValues["has-boiler-checked"] === "noAppointmentArranged"
+            );
+          },
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "gas-recommissioning-visit-date",
+          Component: DateInput,
+          props: {
+            name: "gas-recommissioning-visit-date",
+          },
+          renderWhen(stepValues: {
+            "has-boiler-checked"?: ComponentValue<
+              ProcessDatabaseSchema,
+              "property"
+            >;
+          }): boolean {
+            return (
+              stepValues["has-boiler-checked"] === "yesTenantHasCertificate" ||
+              stepValues["has-boiler-checked"] ===
+                "yesTenantDoesNotHaveCertificate" ||
+              stepValues["has-boiler-checked"] === "noAppointmentArranged"
+            );
+          },
+          defaultValue: {} as { day: ""; month: ""; year: "" },
+          emptyValue: {} as { day: ""; month: ""; year: "" },
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
+            storeName: "property",
+            key: keyFromSlug(),
+            property: ["gas", "visitDate"],
           }),
         })
       ),
@@ -213,7 +267,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               stepValues["has-boiler-checked"] === "yesTenantHasCertificate" ||
               stepValues["has-boiler-checked"] ===
                 "yesTenantDoesNotHaveCertificate" ||
-              stepValues["has-boiler-checked"] === "noVisitArranged"
+              stepValues["has-boiler-checked"] === "noVisitArranged" ||
+              stepValues["has-boiler-checked"] === "noAppointmentArranged"
             );
           },
           defaultValue: [] as Notes,

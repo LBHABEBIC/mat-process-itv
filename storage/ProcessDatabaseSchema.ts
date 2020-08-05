@@ -37,7 +37,11 @@ type ProcessDatabaseSchema = NamedSchema<
         gas: {
           hasBoilerChecked: string;
           images: string[];
-          date: string;
+          visitDate: {
+            day: string;
+            month: string;
+            year: string;
+          };
           notes: Notes;
         };
         laminatedFlooring: {
