@@ -84,8 +84,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
               //TODO add correct url
               <>
                 Information about alterations is in{" "}
-                <Link href={""} target="_blank">
-                  [Your Tenancy conditions: section 4.19]
+                <Link
+                  href={"https://hackney.gov.uk/your-tenancy-agreement"}
+                  target="_blank"
+                >
+                  Your Tenancy conditions: section 4.19
                 </Link>{" "}
                 (online only, opens in a new tab)
               </>
