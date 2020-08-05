@@ -81,7 +81,6 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: Paragraph,
           props: {
             children: (
-              //TODO add correct url
               <>
                 Information about alterations is in{" "}
                 <Link
