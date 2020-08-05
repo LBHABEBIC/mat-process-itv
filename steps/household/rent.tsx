@@ -33,6 +33,21 @@ import Storage from "../../storage/Storage";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
+const paymentCardRadios = [
+  {
+    label: "Yes, has card",
+    value: "yes has card",
+  },
+  {
+    label: "Yes, but has lost card",
+    value: "yes lost card",
+  },
+  {
+    label: "No",
+    value: "no",
+  },
+];
+
 const rentArrearsRadios = [
   {
     label: "Yes, but the tenant is waiting for Housing Benefit Payment",
@@ -76,6 +91,7 @@ const housingBenefitRadios = [
 ];
 
 const questions = {
+  "received-payment-card": "Has the tenant received a rent payment card?",
   "rent-arrears-type": "Are there rent arrears on the account?",
   "has-applied-for-housing-benefit":
     "Has Housing Benefit / Universal Credit been applied for?",
@@ -131,6 +147,26 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
   heading: "Rent, housing benefit and income officer role",
   review: {
     rows: [
+      {
+        label: questions["received-payment-card"],
+        values: {
+          "received-payment-card": {
+            renderValue(type: string): React.ReactNode {
+              return getRadioLabelFromValue(paymentCardRadios, type);
+            },
+          },
+          "payment-card-notes": {
+            renderValue(notes: Notes): React.ReactNode {
+              if (notes.length === 0) {
+                return;
+              }
+
+              return <ReviewNotes notes={notes} />;
+            },
+          },
+        },
+      },
+
       {
         label: questions["rent-arrears-type"],
         values: {
@@ -207,6 +243,54 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "household"> = {
           key: "current-balance",
           Component: CurrentBalance,
           props: {},
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "received-payment-card",
+          Component: RadioButtons,
+          props: {
+            name: "received-payment-card",
+            legend: (
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H2}>
+                  {questions["received-payment-card"]}
+                </Heading>
+              </FieldsetLegend>
+            ) as React.ReactNode,
+            radios: paymentCardRadios,
+          },
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "household"
+          >({
+            storeName: "household",
+            key: keyFromSlug(),
+            property: ["paymentCard", "type"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "payment-card-notes",
+          Component: PostVisitActionInputDetails,
+          props: {
+            summary: "Add notes about payment card if necessary",
+            label: { value: "Notes" },
+            name: "payment-card-notes",
+          } as PostVisitActionInputDetailsProps,
+          defaultValue: [] as Notes,
+          emptyValue: [] as Notes,
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "household"
+          >({
+            storeName: "household",
+            key: keyFromSlug(),
+            property: ["paymentCard", "notes"],
+          }),
         })
       ),
       ComponentWrapper.wrapDynamic(

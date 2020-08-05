@@ -170,7 +170,7 @@ const useHouseholdStatus = (processRef: ProcessRef | undefined): Status => {
       }
 
       const household = householdSet[processRef];
-      const completedLastStep = household?.rentArrears !== undefined;
+      const completedLastStep = household?.paymentCard !== undefined;
 
       return completedLastStep;
     }

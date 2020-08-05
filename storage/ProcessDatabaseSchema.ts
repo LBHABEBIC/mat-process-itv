@@ -158,6 +158,10 @@ type ProcessDatabaseSchema = NamedSchema<
         memberChanges: {
           notes: Notes;
         };
+        paymentCard: {
+          type: string;
+          notes: Notes;
+        };
         rentArrears: {
           type: string;
           notes: Notes;
@@ -338,6 +342,7 @@ export const processNotesPaths: {
   household: [
     "houseMovingSchemes.notes",
     "memberChanges.notes",
+    "paymentCard.notes",
     "rentArrears.notes",
     "housingBenefits.notes",
     "incomeOfficer.notes",
@@ -456,6 +461,10 @@ export const processPostVisitActionMap: {
     "memberChanges.notes": {
       category: "17",
       subcategory: "100000193",
+    },
+    "paymentCard.notes": {
+      category: "17",
+      subcategory: "", //TODO add CRM subcat number
     },
     "rentArrears.notes": {
       category: "17",
