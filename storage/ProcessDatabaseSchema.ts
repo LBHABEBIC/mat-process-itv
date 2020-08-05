@@ -320,6 +320,7 @@ export const processNotesPaths: {
   submitted: [],
   property: [
     "propertyOccupied.notes",
+    "gas.notes",
     "laminatedFlooring.notes",
     "structuralChanges.notes",
     "damage.notes",
@@ -372,6 +373,10 @@ export const processPostVisitActionMap: {
   submitted: {},
   property: {
     "propertyOccupied.notes": {
+      category: "20",
+      subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
+    },
+    "gas.notes": {
       category: "20",
       subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
     },

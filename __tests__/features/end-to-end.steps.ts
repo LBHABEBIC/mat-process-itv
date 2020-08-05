@@ -34,6 +34,11 @@ const processData = {
     gas: {
       hasBoilerChecked: "yesTenantHasCertificate",
       images: [imagePath],
+      visitDate: {
+        day: "01",
+        month: "01",
+        year: "2012",
+      },
       notes: [
         {
           value: "Gas boiler notes",
@@ -426,7 +431,9 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       // Wait for redirect.
       await browser!.wait(
-        until.elementLocated({ css: '[data-testid="submit"]' }),
+        until.elementLocated({
+          css: '[data-testid="submit"]',
+        }),
         10000
       );
 
@@ -437,7 +444,9 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       // Wait for data fetching.
       await browser!.waitForEnabledElement(
-        { css: '[data-testid="submit"]' },
+        {
+          css: '[data-testid="submit"]',
+        },
         1000,
         10000
       );
@@ -503,11 +512,15 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       );
 
       await browser!.waitForEnabledElement(
-        { css: '[href$="/present-for-check"]' },
+        {
+          css: '[href$="/present-for-check"]',
+        },
         10000
       );
 
-      await browser!.submit({ css: '[href$="/present-for-check"]' });
+      await browser!.submit({
+        css: '[href$="/present-for-check"]',
+      });
 
       //fix this
       // Present for check page
@@ -531,7 +544,9 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
         `${processRef}/verify`
       );
 
-      await browser!.submit({ css: `[href$="/id/${presentTenantRef}"]` });
+      await browser!.submit({
+        css: `[href$="/id/${presentTenantRef}"]`,
+      });
 
       // ID page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -878,6 +893,23 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       (
         await browser!.waitForEnabledElement({
           name: "property-occupied-notes",
+        })
+      ).sendKeys(processData.property.propertyOccupied.notes[0].value);
+
+      await browser!.submit();
+
+      // Gas page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/gas`
+      );
+      (
+        await browser!.waitForEnabledElement({
+          id: `has-boiler-checked-${processData.property.gas.hasBoilerChecked}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "boiler-checked-notes",
         })
       ).sendKeys(processData.property.propertyOccupied.notes[0].value);
 
