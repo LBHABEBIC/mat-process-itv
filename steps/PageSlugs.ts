@@ -90,6 +90,7 @@ const slugs: {
   household: true,
   rent: true,
   "about-property": true,
+  "property-occupation": true, //added as it was missing
   "laminated-flooring": true,
   "structural-changes": true,
   roof: true,

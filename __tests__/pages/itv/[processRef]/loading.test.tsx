@@ -266,7 +266,7 @@ it("renders correctly when online", async () => {
             <h1
               className="lbh-heading-h1"
             >
-              Tenancy and Household Check
+              Introductory Tenancy Visit
             </h1>
           </div>
           <dl
@@ -338,11 +338,6 @@ it("renders correctly when online", async () => {
             }
           
           </style>
-          <h2
-            className="lbh-heading-h2"
-          >
-            Loading
-          </h2>
           <p
             className="lbh-body"
           >
@@ -601,7 +596,7 @@ it("renders correctly when offline", async () => {
             <h1
               className="lbh-heading-h1"
             >
-              Tenancy and Household Check
+              Introductory Tenancy Visit
             </h1>
           </div>
           <dl
@@ -725,10 +720,10 @@ it("renders correctly when offline", async () => {
             </style>
           </label>
           <button
-            aria-disabled={true}
+            aria-disabled={false}
             className="govuk-button lbh-button"
             data-testid="submit"
-            disabled={true}
+            disabled={false}
             onClick={[Function]}
           >
             Loading...

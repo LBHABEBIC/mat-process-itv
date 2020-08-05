@@ -228,6 +228,15 @@ const processData = {
         },
       ],
     },
+    paymentCard: {
+      type: "yes has card",
+      notes: [
+        {
+          value: "Payment card notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     rentArrears: {
       type: "yes has plan",
       notes: [
@@ -773,7 +782,24 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/rent`
       );
-
+      (
+        await browser!.waitForEnabledElement({
+          id: `received-payment-card-${processData.household.paymentCard.type.replace(
+            /\s/g,
+            "-"
+          )}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          id: "payment-card-notes-summary",
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "payment-card-notes",
+        })
+      ).sendKeys(processData.household.paymentCard.notes[0].value);
       (
         await browser!.waitForEnabledElement({
           id: `rent-arrears-type-${processData.household.rentArrears.type.replace(
