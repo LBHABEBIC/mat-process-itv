@@ -863,24 +863,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
-      // Alterations page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/alterations`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `has-alterations-${processData.property.alterations.hasAlterations}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "alterations-notes",
-        })
-      ).sendKeys(processData.property.propertyOccupied.notes[0].value);
-
-      await browser!.submit();
-
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/laminated-flooring`
