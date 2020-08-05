@@ -10,13 +10,13 @@ import otherComments from "./other-comments";
 import pets from "./pets";
 import repairs from "./repairs";
 import roof from "./roof";
-import rooms from "./rooms";
 import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import structuralChanges from "./structural-changes";
+import propertyOccupation from "./property-occupation";
 
 export default [
-  rooms,
+  propertyOccupation,
   laminatedFlooring,
   structuralChanges,
   roof,

@@ -4,6 +4,8 @@ import {
   ListProps,
   ListTypes,
   Paragraph,
+  Heading,
+  HeadingLevels,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -29,8 +31,7 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "tenant-understands":
-    "Have you discussed antisocial behaviour with the tenant?",
+  "tenant-understands": "Are there any concerns about antisocial behaviour?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
@@ -73,9 +74,18 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-1",
           Component: Paragraph,
           props: {
-            children: `Antisocial behaviour is defined as "behaviour by a 
-            person which causes, or is likely to cause, harassment, alarm or 
-            distress to one or more persons not of the same household as the 
+            children: `Explain about antisocial behaviour and give examples.`,
+          },
+        })
+      ),
+      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
+        new StaticComponent({
+          key: "paragraph-1",
+          Component: Paragraph,
+          props: {
+            children: `Antisocial behaviour is defined as "behaviour by a
+            person which causes, or is likely to cause, harassment, alarm or
+            distress to one or more persons not of the same household as the
             person".`,
           },
         })
@@ -110,7 +120,11 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           props: {
             name: "tenant-understands",
             legend: (
-              <FieldsetLegend>{questions["tenant-understands"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["tenant-understands"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },

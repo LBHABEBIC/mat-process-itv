@@ -1,8 +1,11 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
-  ComponentValue,
   ComponentWrapper,
   DynamicComponent,
 } from "remultiform/component-wrapper";
@@ -23,23 +26,23 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "can-enter-all-rooms": "Can you enter all rooms within the property?",
+  "is-property-occupied": "Does the property look occupied?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
-  title: PageTitles.Rooms,
-  heading: "Room access",
+  title: PageTitles.PropertyOccupation,
+  heading: "Property Occupation",
   review: {
     rows: [
       {
-        label: questions["can-enter-all-rooms"],
+        label: questions["is-property-occupied"],
         values: {
-          "can-enter-all-rooms": {
-            renderValue(ableToEnterAll: string): React.ReactNode {
-              return getRadioLabelFromValue(yesNoRadios, ableToEnterAll);
+          "is-property-occupied": {
+            renderValue(isPropertyOccupied: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, isPropertyOccupied);
             },
           },
-          "room-entry-notes": {
+          "property-occupation-notes": {
             renderValue(notes: Notes): React.ReactNode {
               if (notes.length === 0) {
                 return;
@@ -53,7 +56,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     ],
   },
   step: {
-    slug: PageSlugs.Rooms,
+    slug: PageSlugs.PropertyOccupation,
     nextSlug: PageSlugs.LaminatedFlooring,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
@@ -63,13 +66,15 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "can-enter-all-rooms",
+          key: "is-property-occupied",
           Component: RadioButtons,
           props: {
-            name: "can-enter-all-rooms",
+            name: "is-property-occupied",
             legend: (
               <FieldsetLegend>
-                {questions["can-enter-all-rooms"]}
+                <Heading level={HeadingLevels.H2}>
+                  {questions["is-property-occupied"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
@@ -82,28 +87,20 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["rooms", "canEnterAll"],
+            property: ["propertyOccupied", "isPropertyOccupied"],
           }),
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "room-entry-notes",
+          key: "property-occupied-notes",
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about access if necessary.",
+              value: "Add note about laminated flooring if necessary.",
             },
-            name: "room-entry-notes",
+            name: "property-occupied-notes",
           } as PostVisitActionInputProps,
-          renderWhen(stepValues: {
-            "can-enter-all-rooms"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "property"
-            >;
-          }): boolean {
-            return stepValues["can-enter-all-rooms"] === "no";
-          },
           defaultValue: [] as Notes,
           emptyValue: [] as Notes,
           databaseMap: new ComponentDatabaseMap<
@@ -112,7 +109,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["rooms", "notes"],
+            property: ["propertyOccupied", "notes"],
           }),
         })
       ),

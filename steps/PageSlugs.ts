@@ -28,7 +28,7 @@ enum PageSlugs {
 
   // Property inspection
   AboutProperty = "about-property",
-  Rooms = "rooms",
+  PropertyOccupation = "property-occupation",
   LaminatedFlooring = "laminated-flooring",
   StructuralChanges = "structural-changes",
   Roof = "roof",
@@ -90,7 +90,6 @@ const slugs: {
   household: true,
   rent: true,
   "about-property": true,
-  rooms: true,
   "laminated-flooring": true,
   "structural-changes": true,
   roof: true,
@@ -106,7 +105,6 @@ const slugs: {
   pets: true,
   "antisocial-behaviour": true,
   "other-comments": true,
-  "home-check": true,
   health: true,
   disability: false,
   "support-needs": true,
