@@ -311,9 +311,6 @@ const processData = {
       ],
     },
   },
-  homeCheck: {
-    value: "yes",
-  },
   healthConcerns: {
     value: "yes",
     who: [presentTenantRef],
@@ -1402,19 +1399,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await browser!.submit({
         css: '[href$="/home-check"]',
       });
-
-      // Home check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/home-check`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `home-check-${processData.homeCheck.value}`,
-        })
-      ).click();
-
-      await browser!.submit();
 
       // Health concerns page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
