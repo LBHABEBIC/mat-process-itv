@@ -50,9 +50,8 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
           notes: Notes;
         };
-        structuralChanges: {
-          hasStructuralChanges: string;
-          changesAuthorised: string;
+        alterations: {
+          hasAlterations: string;
           images: string[];
           notes: Notes;
         };
@@ -321,7 +320,7 @@ export const processNotesPaths: {
     "propertyOccupied.notes",
     "gas.notes",
     "laminatedFlooring.notes",
-    "structuralChanges.notes",
+    "alterations.notes",
     "repairs.notes",
     "roof.notes",
     "loft.notes",
@@ -383,9 +382,9 @@ export const processPostVisitActionMap: {
       category: "20",
       subcategory: "100000184",
     },
-    "structuralChanges.notes": {
+    "alterations.notes": {
       category: "20",
-      subcategory: "100000199",
+      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
     },
     "damage.notes": {
       category: "20",

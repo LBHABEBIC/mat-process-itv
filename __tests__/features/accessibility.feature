@@ -126,11 +126,11 @@ Feature: Accessibility
     And I visit /laminated-flooring for the process
     Then the page should be accessible
     And the page should have a descriptive title
-
-  Scenario: Structural changes page is accessible
+  
+  Scenario: Alterations flooring page is accessible
     When I start the process
     And I wait for the data to be fetched
-    And I visit /structural-changes for the process
+    And I visit /alterations for the process
     Then the page should be accessible
     And the page should have a descriptive title
 
