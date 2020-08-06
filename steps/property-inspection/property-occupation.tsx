@@ -97,7 +97,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about laminated flooring if necessary.",
+              value: "Add note if necessary.",
             },
             name: "property-occupied-notes",
           } as PostVisitActionInputProps,
