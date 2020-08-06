@@ -1,11 +1,9 @@
 import {
   FieldsetLegend,
-  List,
-  ListProps,
-  ListTypes,
   Paragraph,
   Heading,
   HeadingLevels,
+  Link,
 } from "lbh-frontend-react/components";
 import React from "react";
 import {
@@ -31,23 +29,33 @@ import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
 const questions = {
-  "tenant-understands": "Are there any concerns about antisocial behaviour?",
+  "tenant-knows-about-refuse":
+    "Does the tenant know about refuse and recycling on the estate?",
+  "tenant-has-food-bin": "Does the tenant have a food waste bin?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
-  title: PageTitles.AntisocialBehaviour,
-  heading: "Antisocial behaviour",
+  title: PageTitles.Refuse,
+  heading: PageTitles.Refuse,
   review: {
     rows: [
       {
-        label: questions["tenant-understands"],
+        label: questions["tenant-knows-about-refuse"],
         values: {
-          "tenant-understands": {
-            renderValue(tenantUnderstands: string): React.ReactNode {
-              return getRadioLabelFromValue(yesNoRadios, tenantUnderstands);
+          "tenant-knows-about-refuse": {
+            renderValue(tenantKnowsAboutRefuse: string): React.ReactNode {
+              return getRadioLabelFromValue(
+                yesNoRadios,
+                tenantKnowsAboutRefuse
+              );
             },
           },
-          "antisocial-behaviour-notes": {
+          "tenant-has-food-bin": {
+            renderValue(tenantHasFoodBin: string): React.ReactNode {
+              return getRadioLabelFromValue(yesNoRadios, tenantHasFoodBin);
+            },
+          },
+          "refuse-notes": {
             renderValue(notes: Notes): React.ReactNode {
               if (notes.length === 0) {
                 return;
@@ -61,8 +69,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     ],
   },
   step: {
-    slug: PageSlugs.AntisocialBehaviour,
-    nextSlug: PageSlugs.Refuse,
+    slug: PageSlugs.Refuse,
+    nextSlug: PageSlugs.OtherComments,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
@@ -74,7 +82,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-1",
           Component: Paragraph,
           props: {
-            children: `Explain about antisocial behaviour and give examples.`,
+            children: `Discuss with tenant about refuse disposal and recycling facilities available
+`,
           },
         })
       ),
@@ -83,46 +92,31 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           key: "paragraph-2",
           Component: Paragraph,
           props: {
-            children: `Antisocial behaviour is defined as "behaviour by a
-            person which causes, or is likely to cause, harassment, alarm or
-            distress to one or more persons not of the same household as the
-            person".`,
+            children: (
+              <>
+                Food waste bins can be ordered via 020 8356 6688 or{" "}
+                <Link
+                  href="https://hackney.gov.uk/order-recycling-products"
+                  target="_blank"
+                >
+                  Council&apos;s website
+                </Link>{" "}
+                (online only, opens in new tab).
+              </>
+            ),
           },
-        })
-      ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
-        new StaticComponent({
-          key: "paragraph-3",
-          Component: Paragraph,
-          props: {
-            children: `Examples include:`,
-          },
-        })
-      ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
-        new StaticComponent({
-          key: "paragraph-3-list",
-          Component: List,
-          props: {
-            items: [
-              "noise such as: persistent loud music, banging, shouting",
-              "ongoing leaks",
-              "neighbour disputes",
-            ],
-            type: ListTypes.Bullet,
-          } as ListProps,
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "tenant-understands",
+          key: "tenant-knows-about-refuse",
           Component: RadioButtons,
           props: {
-            name: "tenant-understands",
+            name: "tenant-knows-about-refuse",
             legend: (
               <FieldsetLegend>
                 <Heading level={HeadingLevels.H3}>
-                  {questions["tenant-understands"]}
+                  {questions["tenant-knows-about-refuse"]}
                 </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
@@ -136,33 +130,44 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["antisocialBehaviour", "tenantUnderstands"],
+            property: ["refuse", "tenantKnowsAboutRefuse"],
           }),
-        })
-      ),
-      ComponentWrapper.wrapStatic<ProcessDatabaseSchema, "property">(
-        new StaticComponent({
-          key: "paragraph-4",
-          Component: Paragraph,
-          props: {
-            children: `Explain about antisocial behaviour and give examples.`,
-          },
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "antisocial-behaviour-notes",
+          key: "tenant-has-food-bin",
+          Component: RadioButtons,
+          props: {
+            name: "tenant-has-food-bin",
+            legend: (
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["tenant-has-food-bin"]}
+                </Heading>
+              </FieldsetLegend>
+            ) as React.ReactNode,
+            radios: yesNoRadios,
+          },
+          defaultValue: "",
+          emptyValue: "",
+          databaseMap: new ComponentDatabaseMap<
+            ProcessDatabaseSchema,
+            "property"
+          >({
+            storeName: "property",
+            key: keyFromSlug(),
+            property: ["refuse", "tenantHasFoodBin"],
+          }),
+        })
+      ),
+      ComponentWrapper.wrapDynamic(
+        new DynamicComponent({
+          key: "refuse-notes",
           Component: PostVisitActionInput,
           props: {
-            label: {
-              value: (
-                <>
-                  Add note about antisocial behaviour <b>by</b> or{" "}
-                  <b>against</b> tenant if necessary.
-                </>
-              ),
-            },
-            name: "antisocial-behaviour-notes",
+            label: { value: "Add note if necessary" },
+            name: "refuse-notes",
           } as PostVisitActionInputProps,
           defaultValue: [] as Notes,
           emptyValue: [] as Notes,
@@ -172,7 +177,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["antisocialBehaviour", "notes"],
+            property: ["refuse", "notes"],
           }),
         })
       ),

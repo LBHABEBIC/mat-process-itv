@@ -15,6 +15,7 @@ import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
+import refuse from "./refuse";
 
 export default [
   propertyOccupation,
@@ -33,5 +34,6 @@ export default [
   communalAreas,
   pets,
   antisocialBehaviour,
+  refuse,
   otherComments,
 ];

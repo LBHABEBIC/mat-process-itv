@@ -1278,6 +1278,28 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
+      // Refuse and recycling page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/refuse`
+      );
+      (
+        await browser!.waitForEnabledElement({
+          id: `tenant-knows-about-refuse-${processData.property.refuse.tenantKnowsAboutRefuse}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          id: `tenant-has-food-bin-${processData.property.refuse.tenantHasFoodBin}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "refuse-notes",
+        })
+      ).sendKeys(processData.property.refuse.notes[0].value);
+
+      await browser!.submit();
+
       // Other comments page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/other-comments`

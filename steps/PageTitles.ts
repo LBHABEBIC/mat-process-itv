@@ -43,6 +43,7 @@ enum PageTitles {
   CommunalAreas = "Communal areas",
   Pets = "Pets",
   AntisocialBehaviour = "Antisocial behaviour",
+  Refuse = "Refuse and recycling",
   OtherComments = "Other comments",
 
   // Wellbeing support
