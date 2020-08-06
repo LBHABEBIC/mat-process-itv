@@ -399,7 +399,7 @@ const processData = {
           },
         ],
       },
-      OtherSupport: {
+      otherSupport: {
         hasSignedUp: "yes",
         notes: [
           {
@@ -740,32 +740,32 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
           name: "gp-signed-up",
         })
       ).sendKeys(
-        processData.residents[presentTenantRef].OtherSupport.notes[0].value
+        processData.residents[presentTenantRef].otherSupport.notes[0].value
       );
 
       (
         await browser!.waitForEnabledElement({
           name: "other-support-full-name",
         })
-      ).sendKeys(processData.residents[presentTenantRef].OtherSupport.fullName);
+      ).sendKeys(processData.residents[presentTenantRef].otherSupport.fullName);
       (
         await browser!.waitForEnabledElement({
           name: "other-support-role",
         })
-      ).sendKeys(processData.residents[presentTenantRef].OtherSupport.role);
+      ).sendKeys(processData.residents[presentTenantRef].otherSupport.role);
       (
         await browser!.waitForEnabledElement({
           name: "other-support-organisation",
         })
       ).sendKeys(
-        processData.residents[presentTenantRef].OtherSupport.organisation
+        processData.residents[presentTenantRef].otherSupport.organisation
       );
       (
         await browser!.waitForEnabledElement({
           name: "  other-support-phone-number",
         })
       ).sendKeys(
-        processData.residents[presentTenantRef].OtherSupport.phoneNumber
+        processData.residents[presentTenantRef].otherSupport.phoneNumber
       );
 
       await browser!.submit();
