@@ -399,9 +399,17 @@ const processData = {
           },
         ],
       },
-      otherSupport: {
+      OtherSupport: {
+        hasSignedUp: "yes",
+        notes: [
+          {
+            value: "GP notes",
+            isPostVisitAction: false,
+          },
+        ],
         fullName: "Other support name",
         role: "other support role",
+        organisation: "other organisation",
         phoneNumber: "0123455789",
       },
       disabilities: {
@@ -424,6 +432,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
   test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       const processRef = process.env.TEST_PROCESS_REF;
+      ``;
 
       // Index page
       await browser!.getRelative("", true);
@@ -721,27 +730,42 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       ).sendKeys(processData.residents[presentTenantRef].carer.notes[0].value);
 
       await browser!.submit();
-      //Other support page
+
+      //Gp and Other support page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `/other-support/${presentTenantRef}`
+      );
+      (
+        await browser!.waitForEnabledElement({
+          name: "gp-signed-up",
+        })
+      ).sendKeys(
+        processData.residents[presentTenantRef].OtherSupport.notes[0].value
       );
 
       (
         await browser!.waitForEnabledElement({
           name: "other-support-full-name",
         })
-      ).sendKeys(processData.residents[presentTenantRef].otherSupport.fullName);
+      ).sendKeys(processData.residents[presentTenantRef].OtherSupport.fullName);
       (
         await browser!.waitForEnabledElement({
           name: "other-support-role",
         })
-      ).sendKeys(processData.residents[presentTenantRef].otherSupport.role);
+      ).sendKeys(processData.residents[presentTenantRef].OtherSupport.role);
       (
         await browser!.waitForEnabledElement({
-          name: "other-support-phone-number",
+          name: "other-support-organisation",
         })
       ).sendKeys(
-        processData.residents[presentTenantRef].otherSupport.phoneNumber
+        processData.residents[presentTenantRef].OtherSupport.organisation
+      );
+      (
+        await browser!.waitForEnabledElement({
+          name: "  other-support-phone-number",
+        })
+      ).sendKeys(
+        processData.residents[presentTenantRef].OtherSupport.phoneNumber
       );
 
       await browser!.submit();

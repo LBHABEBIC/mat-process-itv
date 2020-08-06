@@ -89,7 +89,11 @@ const mockProcessData = {
           photo: { isWilling: "yes", images: [] },
           nextOfKin: { fullName: "njkl" },
           carer: { hasCarer: "no" },
-          otherSupport: { fullName: "mzsl", role: "." },
+          otherSupport: {
+            fullName: "mzsl",
+            role: ".",
+            phoneNumber: "07833109098",
+          },
           signature: "",
         },
       },

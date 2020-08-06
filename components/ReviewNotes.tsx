@@ -1,6 +1,5 @@
 import formatDate from "date-fns/format";
 import React from "react";
-import PropTypes from "../helpers/PropTypes";
 import { Notes } from "../storage/DatabaseSchema";
 
 export interface ReviewNotesProps {
@@ -30,14 +29,4 @@ export const ReviewNotes: React.FunctionComponent<ReviewNotesProps> = (
       ))}
     </>
   );
-};
-
-ReviewNotes.propTypes = {
-  notes: PropTypes.arrayOf(
-    PropTypes.exact({
-      value: PropTypes.string.isRequired,
-      isPostVisitAction: PropTypes.bool.isRequired,
-      createdAt: PropTypes.string,
-    }).isRequired
-  ).isRequired,
 };
