@@ -70,7 +70,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   },
   step: {
     slug: PageSlugs.Refuse,
-    nextSlug: PageSlugs.OtherComments,
+    nextSlug: PageSlugs.Queries,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,

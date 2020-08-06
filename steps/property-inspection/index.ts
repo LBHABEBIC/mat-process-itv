@@ -16,6 +16,7 @@ import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
 import refuse from "./refuse";
+import queries from "./queries";
 
 export default [
   propertyOccupation,
@@ -35,5 +36,6 @@ export default [
   pets,
   antisocialBehaviour,
   refuse,
+  queries,
   otherComments,
 ];

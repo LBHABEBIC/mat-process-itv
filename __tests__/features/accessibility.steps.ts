@@ -84,6 +84,7 @@ defineFeature(loadFeature("./accessibility.feature"), (test) => {
   testAccessibility(test, "Pets");
   testAccessibility(test, "Antisocial behaviour");
   testAccessibility(test, "Refuse and recycling");
+  testAccessibility(test, "Queries about new home or estate");
   testAccessibility(test, "Other comments");
   testAccessibility(test, "Home check");
   testAccessibility(test, "Health");

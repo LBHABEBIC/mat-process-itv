@@ -67,7 +67,6 @@ const processData = {
         },
       ],
     },
-
     roof: {
       hasAccess: "yes",
       itemsStoredOnRoof: "yes",
@@ -193,6 +192,39 @@ const processData = {
         },
       ],
     },
+    refuse: {
+      tenantKnowsAboutRefuse: "yes",
+      tenantHasFoodBin: "yes",
+      notes: [
+        {
+          value: "Refuse and recycling notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
+    queries: {
+      tenantHasBooklet: "yes",
+      bookletNotes: [
+        {
+          value: "Booklet notes",
+          isPostVisitAction: false,
+        },
+      ],
+      tenantHasHomeQueries: "yes",
+      homeQueriesNotes: [
+        {
+          value: "Home queries notes",
+          isPostVisitAction: false,
+        },
+      ],
+      tenantHasFacilitiesQueries: "yes",
+      facilitiesQueriesNotes: [
+        {
+          value: "Facilities queries notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     otherComments: {
       images: [imagePath],
       notes: [
@@ -278,9 +310,6 @@ const processData = {
         },
       ],
     },
-  },
-  homeCheck: {
-    value: "yes",
   },
   healthConcerns: {
     value: "yes",
@@ -1300,6 +1329,43 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
+      // Queries page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/queries`
+      );
+      (
+        await browser!.waitForEnabledElement({
+          id: `tenant-has-booklet-${processData.property.queries.tenantHasBooklet}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "refuse-notes",
+        })
+      ).sendKeys(processData.property.queries.bookletNotes[0].value);
+      (
+        await browser!.waitForEnabledElement({
+          id: `tenant-has-home-queries-${processData.property.queries.tenantHasHomeQueries}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "refuse-notes",
+        })
+      ).sendKeys(processData.property.queries.homeQueriesNotes[0].value);
+      (
+        await browser!.waitForEnabledElement({
+          id: `tenant-has-facilities-queries-${processData.property.queries.tenantHasFacilitiesQueries}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "refuse-notes",
+        })
+      ).sendKeys(processData.property.queries.facilitiesQueriesNotes[0].value);
+
+      await browser!.submit();
+
       // Other comments page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/other-comments`
@@ -1333,19 +1399,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await browser!.submit({
         css: '[href$="/home-check"]',
       });
-
-      // Home check page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/home-check`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `home-check-${processData.homeCheck.value}`,
-        })
-      ).click();
-
-      await browser!.submit();
 
       // Health concerns page
       await expect(browser!.getCurrentUrl()).resolves.toContain(

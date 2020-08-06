@@ -44,6 +44,7 @@ enum PageTitles {
   Pets = "Pets",
   AntisocialBehaviour = "Antisocial behaviour",
   Refuse = "Refuse and recycling",
+  Queries = "Queries about new home or estate",
   OtherComments = "Other comments",
 
   // Wellbeing support

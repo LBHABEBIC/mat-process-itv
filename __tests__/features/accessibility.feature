@@ -126,7 +126,7 @@ Feature: Accessibility
     And I visit /laminated-flooring for the process
     Then the page should be accessible
     And the page should have a descriptive title
-  
+
   Scenario: Alterations flooring page is accessible
     When I start the process
     And I wait for the data to be fetched
@@ -215,6 +215,13 @@ Feature: Accessibility
     When I start the process
     And I wait for the data to be fetched
     And I visit /refuse for the process
+    Then the page should be accessible
+    And the page should have a descriptive title
+
+  Scenario: Queries about new home or estate is accessible
+    When I start the process
+    And I wait for the data to be fetched
+    And I visit /queries for the process
     Then the page should be accessible
     And the page should have a descriptive title
 

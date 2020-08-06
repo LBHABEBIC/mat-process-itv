@@ -45,6 +45,7 @@ enum PageSlugs {
   Pets = "pets",
   AntisocialBehaviour = "antisocial-behaviour",
   Refuse = "refuse",
+  Queries = "queries",
   OtherComments = "other-comments",
 
   // Wellbeing support
@@ -109,6 +110,7 @@ const slugs: {
   pets: true,
   "antisocial-behaviour": true,
   refuse: true,
+  queries: true,
   "other-comments": true,
   health: true,
   disability: false,

@@ -125,6 +125,14 @@ type ProcessDatabaseSchema = NamedSchema<
           tenantHasFoodBin: string;
           notes: Notes;
         };
+        queries: {
+          tenantHasBooklet: string;
+          bookletNotes: Notes;
+          tenantHasHomeQueries: string;
+          homeQueriesNotes: Notes;
+          tenantHasFacilitiesQueries: string;
+          facilitiesQueriesNotes: Notes;
+        };
         otherComments: {
           images: string[];
           notes: Notes;
@@ -339,6 +347,9 @@ export const processNotesPaths: {
     "pets.notes",
     "antisocialBehaviour.notes",
     "refuse.notes",
+    "bookletNotes.notes",
+    "homeQueriesNotes.notes",
+    "facilitiesQueriesNotes.notes",
     "otherComments.notes",
   ],
   isUnannouncedVisit: ["notes"],
@@ -445,6 +456,18 @@ export const processPostVisitActionMap: {
       subcategory: "100000302",
     },
     "refuse.notes": {
+      category: "23",
+      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+    },
+    "bookletNotes.notes": {
+      category: "23",
+      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+    },
+    "homeQueriesNotes.notes": {
+      category: "23",
+      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+    },
+    "facilitiesQueriesNotes.notes": {
       category: "23",
       subcategory: "XXXXXXXX", // TODO: get correct subcategory value
     },
