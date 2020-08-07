@@ -44,6 +44,10 @@ type ProcessDatabaseSchema = NamedSchema<
           };
           notes: Notes;
         };
+        decorationPack: {
+          hasDecorationPack: string;
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;

@@ -15,12 +15,14 @@ import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
+import decorationPack from "./decoration-pack";
 import refuse from "./refuse";
 import queries from "./queries";
 
 export default [
   propertyOccupation,
   gas,
+  decorationPack,
   laminatedFlooring,
   alterations,
   roof,

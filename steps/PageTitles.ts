@@ -28,6 +28,7 @@ enum PageTitles {
   Rooms = "Rooms",
   PropertyOccupation = "Property occupation",
   Gas = "Gas",
+  DecorationPack = "Decoration pack",
   LaminatedFlooring = "Laminated flooring",
   Alterations = "Alterations",
   Damage = "Damage",

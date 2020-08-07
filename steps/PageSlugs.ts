@@ -30,6 +30,7 @@ enum PageSlugs {
   AboutProperty = "about-property",
   PropertyOccupation = "property-occupation",
   Gas = "gas",
+  DecorationPack = "Decoration pack",
   LaminatedFlooring = "laminated-flooring",
   Alterations = "alterations",
   Roof = "roof",

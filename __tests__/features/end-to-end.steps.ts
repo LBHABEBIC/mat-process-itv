@@ -46,6 +46,16 @@ const processData = {
         },
       ],
     },
+    decorationPack: {
+      hasDecorationPack: "yes",
+      hasPermission: "yes",
+      notes: [
+        {
+          value: "Decoration pack notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",
@@ -957,6 +967,24 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
           name: "boiler-checked-notes",
         })
       ).sendKeys(processData.property.propertyOccupied.notes[0].value);
+
+      await browser!.submit();
+
+      // Decoration pack page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/property-occupation``${processRef}/decoration-pack`
+      );
+
+      (
+        await browser!.waitForEnabledElement({
+          id: `decoration-pack-delivered-${processData.property.decorationPack.hasDecorationPack}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "decoration-pack-notes",
+        })
+      ).sendKeys(processData.property.decorationPack.notes[0].value);
 
       await browser!.submit();
 
