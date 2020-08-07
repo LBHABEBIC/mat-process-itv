@@ -21,15 +21,6 @@ type ResidentDatabaseSchema = NamedSchema<
       };
     };
 
-    residency: {
-      key: ResidentRef;
-      value: {
-        type: string;
-        images: string[];
-        notes: Notes;
-      };
-    };
-
     photo: {
       key: ResidentRef;
       value: {
@@ -93,7 +84,6 @@ const storeNames: {
   [Name in StoreNames<ResidentDatabaseSchema["schema"]>]: boolean;
 } = {
   id: true,
-  residency: true,
   photo: true,
   nextOfKin: true,
   carer: true,
@@ -120,7 +110,6 @@ export const residentNotesPaths: {
   nextOfKin: [],
   otherSupport: ["notes"],
   photo: ["notes"],
-  residency: ["notes"],
   disabilities: [],
   signature: [],
 };
@@ -131,12 +120,6 @@ export const residentPostVisitActionMap: {
   };
 } = {
   id: {
-    notes: {
-      category: "19",
-      subcategory: "100000196",
-    },
-  },
-  residency: {
     notes: {
       category: "19",
       subcategory: "100000196",

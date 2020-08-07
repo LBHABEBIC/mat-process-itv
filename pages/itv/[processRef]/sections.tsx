@@ -82,18 +82,18 @@ const useIdAndResidencyStatus = (
 
   const residencyCompleted = useValidateData(
     Storage.ResidentContext,
-    ["residency"],
+    ["photo"],
     allTenantIds,
     (valueSets) => {
-      const residencySet = valueSets.residency;
+      const photoSet = valueSets.photo;
 
-      if (residencySet === undefined) {
+      if (photoSet === undefined) {
         return false;
       }
 
       const allCompletedRequiredStep =
-        Object.values(residencySet).length === allTenantIds?.length &&
-        Object.values(residencySet).every((residency) => residency?.type);
+        Object.values(photoSet).length === allTenantIds?.length &&
+        Object.values(photoSet).every((photo) => photo?.images);
 
       return allCompletedRequiredStep;
     }
