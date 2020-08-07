@@ -432,7 +432,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
   test("Performing a check", ({ when, then }) => {
     when("I complete a process", async () => {
       const processRef = process.env.TEST_PROCESS_REF;
-      ``;
 
       // Index page
       await browser!.getRelative("", true);

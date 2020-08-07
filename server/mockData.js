@@ -90,8 +90,11 @@ const mockProcessData = {
           nextOfKin: { fullName: "njkl" },
           carer: { hasCarer: "no" },
           otherSupport: {
+            hasSignedUp: "yes",
+            notes: "notegp",
             fullName: "mzsl",
-            role: ".",
+            organisation: "place",
+            role: "person",
             phoneNumber: "07833109098",
           },
           signature: "",
