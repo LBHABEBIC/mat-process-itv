@@ -972,7 +972,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       // Decoration pack page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/property-occupation``${processRef}/decoration-pack`
+        `${processRef}/decoration-pack`
       );
 
       (
