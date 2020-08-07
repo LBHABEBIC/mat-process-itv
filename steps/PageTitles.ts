@@ -9,11 +9,10 @@ enum PageTitles {
   Start = "Start",
   AboutVisit = "About visit",
 
-  // ID, residency, and tenant information
+  // ID and tenant information
   PresentForCheck = "Present for check",
   Verify = "Verify tenant details",
   Id = "ID",
-  Residency = "Residency",
   TenantPhoto = "Tenant photo",
   NextOfKin = "Next of kin",
   Carer = "Carer",
