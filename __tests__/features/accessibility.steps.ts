@@ -74,7 +74,6 @@ defineFeature(loadFeature("./accessibility.feature"), (test) => {
   testAccessibility(test, "Roof");
   testAccessibility(test, "Loft");
   testAccessibility(test, "Garden");
-  testAccessibility(test, "Storing materials");
   testAccessibility(test, "Fire exit");
   testAccessibility(test, "Smoke alarm");
   testAccessibility(test, "Metal gates");

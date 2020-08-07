@@ -109,16 +109,6 @@ const processData = {
         },
       ],
     },
-    storingMaterials: {
-      isStoringMaterials: "yes",
-      furtherActionRequired: "yes",
-      notes: [
-        {
-          value: "Storing materials notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
     fireExit: {
       hasFireExit: "yes",
       isAccessible: "yes",
@@ -1089,29 +1079,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
-      // Storing materials page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/storing-materials`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `is-storing-materials-${processData.property.storingMaterials.isStoringMaterials}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          id: `further-action-required-${processData.property.storingMaterials.furtherActionRequired}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "stored-materials-notes",
-        })
-      ).sendKeys(processData.property.storingMaterials.notes[0].value);
-
-      await browser!.submit();
-
       // Fire exit page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/fire-exit`
@@ -1595,7 +1562,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Roof notes");
       await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
-      await Expect.pageToContain("Storing materials notes");
       await Expect.pageToContain("Fire exit notes");
       await Expect.pageToContain("Smoke alarm notes");
       await Expect.pageToContain("Metal gates notes");
@@ -1655,7 +1621,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Roof notes");
       await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
-      await Expect.pageToContain("Storing materials notes");
       await Expect.pageToContain("Fire exit notes");
       await Expect.pageToContain("Smoke alarm notes");
       await Expect.pageToContain("Metal gates notes");
