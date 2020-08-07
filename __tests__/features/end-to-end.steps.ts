@@ -429,8 +429,16 @@ const processData = {
         ],
       },
       otherSupport: {
+        hasSignedUp: "yes",
+        notes: [
+          {
+            value: "GP notes",
+            isPostVisitAction: false,
+          },
+        ],
         fullName: "Other support name",
         role: "other support role",
+        organisation: "other organisation",
         phoneNumber: "0123455789",
       },
       disabilities: {
@@ -750,9 +758,17 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       ).sendKeys(processData.residents[presentTenantRef].carer.notes[0].value);
 
       await browser!.submit();
-      //Other support page
+
+      //Gp and Other support page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `/other-support/${presentTenantRef}`
+      );
+      (
+        await browser!.waitForEnabledElement({
+          name: "gp-signed-up",
+        })
+      ).sendKeys(
+        processData.residents[presentTenantRef].otherSupport.notes[0].value
       );
 
       (
@@ -767,7 +783,14 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       ).sendKeys(processData.residents[presentTenantRef].otherSupport.role);
       (
         await browser!.waitForEnabledElement({
-          name: "other-support-phone-number",
+          name: "other-support-organisation",
+        })
+      ).sendKeys(
+        processData.residents[presentTenantRef].otherSupport.organisation
+      );
+      (
+        await browser!.waitForEnabledElement({
+          name: "  other-support-phone-number",
         })
       ).sendKeys(
         processData.residents[presentTenantRef].otherSupport.phoneNumber

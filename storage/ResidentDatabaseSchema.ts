@@ -69,9 +69,12 @@ type ResidentDatabaseSchema = NamedSchema<
     otherSupport: {
       key: ResidentRef;
       value: {
+        hasSignedUp: string;
         fullName: string;
+        organisation: string;
         role: string;
         phoneNumber: string;
+        notes: Notes;
       };
     };
 
@@ -158,7 +161,7 @@ export const residentPostVisitActionMap: {
   otherSupport: {
     notes: {
       category: "19",
-      subcategory: "100000300",
+      subcategory: "XXXXXXX", //TODO add correct crm number
     },
   },
   disabilities: {},
