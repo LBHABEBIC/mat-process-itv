@@ -10,7 +10,6 @@ import metalGates from "./metal-gates";
 import otherComments from "./other-comments";
 import pets from "./pets";
 import repairs from "./repairs";
-import roof from "./roof";
 import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
@@ -23,7 +22,6 @@ export default [
   gas,
   laminatedFlooring,
   alterations,
-  roof,
   loft,
   garden,
   repairs,

@@ -67,16 +67,6 @@ const processData = {
         },
       ],
     },
-    roof: {
-      hasAccess: "yes",
-      itemsStoredOnRoof: "yes",
-      notes: [
-        {
-          value: "Roof notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
     loft: {
       hasAccess: "yes",
       itemsStored: "yes",
@@ -994,28 +984,7 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       // Damage page deleted
 
-      // Roof page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/roof`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `has-access-${processData.property.roof.hasAccess}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          id: `items-stored-on-roof-${processData.property.roof.itemsStoredOnRoof}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "roof-notes",
-        })
-      ).sendKeys(processData.property.roof.notes[0].value);
-
-      await browser!.submit();
+      // Roof page deleted
 
       // Loft page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -1592,7 +1561,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Laminated flooring notes");
       await Expect.pageToContain("Alterations notes");
       await Expect.pageToContain("Damage notes");
-      await Expect.pageToContain("Roof notes");
       await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
       await Expect.pageToContain("Storing materials notes");
@@ -1652,7 +1620,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Laminated flooring notes");
       await Expect.pageToContain("Structural changes notes");
       await Expect.pageToContain("Damage notes");
-      await Expect.pageToContain("Roof notes");
       await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
       await Expect.pageToContain("Storing materials notes");
