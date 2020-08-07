@@ -5,7 +5,6 @@ import fireExit from "./fire-exit";
 import garden from "./garden";
 import laminatedFlooring from "./laminated-flooring";
 import alterations from "./alterations";
-import loft from "./loft";
 import metalGates from "./metal-gates";
 import otherComments from "./other-comments";
 import pets from "./pets";
@@ -24,7 +23,6 @@ export default [
   laminatedFlooring,
   alterations,
   roof,
-  loft,
   garden,
   repairs,
   storingMaterials,
