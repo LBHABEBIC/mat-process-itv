@@ -65,11 +65,6 @@ type ProcessDatabaseSchema = NamedSchema<
           itemsStoredOnRoof: string;
           notes: Notes;
         };
-        loft: {
-          hasAccess: string;
-          itemsStored: string;
-          notes: Notes;
-        };
         garden: {
           hasGarden: string;
           type: string;
@@ -336,7 +331,6 @@ export const processNotesPaths: {
     "alterations.notes",
     "repairs.notes",
     "roof.notes",
-    "loft.notes",
     "garden.notes",
     "storingMaterials.notes",
     "fireExit.notes",
@@ -414,10 +408,6 @@ export const processPostVisitActionMap: {
     "roof.notes": {
       category: "20",
       subcategory: "100000172",
-    },
-    "loft.notes": {
-      category: "20",
-      subcategory: "100000171",
     },
     "garden.notes": {
       category: "20",
