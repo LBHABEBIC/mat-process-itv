@@ -44,6 +44,10 @@ type ProcessDatabaseSchema = NamedSchema<
           };
           notes: Notes;
         };
+        decorationPack: {
+          hasDecorationPack: string;
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -327,6 +331,7 @@ export const processNotesPaths: {
   property: [
     "propertyOccupied.notes",
     "gas.notes",
+    "decorationPack.notes",
     "laminatedFlooring.notes",
     "alterations.notes",
     "repairs.notes",
@@ -388,6 +393,10 @@ export const processPostVisitActionMap: {
     "gas.notes": {
       category: "20",
       subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
+    },
+    "decorationPack.notes": {
+      category: "20",
+      subcategory: "xxxxxxxx", // TODO: get correct subcategory value
     },
     "laminatedFlooring.notes": {
       category: "20",
