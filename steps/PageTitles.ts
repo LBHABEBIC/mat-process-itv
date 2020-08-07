@@ -33,7 +33,6 @@ enum PageTitles {
   Damage = "Damage",
   Garden = "Garden",
   Repairs = "Repairs",
-  StoringMaterials = "Storing materials",
   FireExit = "Fire exit",
   SmokeAlarm = "Smoke alarm",
   MetalGates = "Metal gates",

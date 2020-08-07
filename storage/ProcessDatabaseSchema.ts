@@ -71,11 +71,6 @@ type ProcessDatabaseSchema = NamedSchema<
           images: string[];
           notes: Notes;
         };
-        storingMaterials: {
-          isStoringMaterials: string;
-          furtherActionRequired: string;
-          notes: Notes;
-        };
         fireExit: {
           hasFireExit: string;
           isAccessible: string;
@@ -331,7 +326,6 @@ export const processNotesPaths: {
     "alterations.notes",
     "repairs.notes",
     "garden.notes",
-    "storingMaterials.notes",
     "fireExit.notes",
     "smokeAlarm.notes",
     "metalGates.notes",
@@ -411,10 +405,6 @@ export const processPostVisitActionMap: {
     "garden.notes": {
       category: "20",
       subcategory: "100000183",
-    },
-    "storingMaterials.notes": {
-      category: "20",
-      subcategory: "100000556",
     },
     "fireExit.notes": {
       category: "20",

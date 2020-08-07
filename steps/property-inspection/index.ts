@@ -10,7 +10,6 @@ import otherComments from "./other-comments";
 import pets from "./pets";
 import repairs from "./repairs";
 import smokeAlarm from "./smoke-alarm";
-import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
 import decorationPack from "./decoration-pack";
@@ -25,7 +24,6 @@ export default [
   alterations,
   garden,
   repairs,
-  storingMaterials,
   fireExit,
   smokeAlarm,
   metalGates,
