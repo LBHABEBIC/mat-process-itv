@@ -113,6 +113,13 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
+  Scenario: Decoration pack page page is accessible
+    When I start the process
+    And I wait for the data to be fetched
+    And I visit /decoration-pack for the process
+    Then the page should be accessible
+    And the page should have a descriptive title
+
   Scenario: Laminated flooring page is accessible
     When I start the process
     And I wait for the data to be fetched
@@ -124,13 +131,6 @@ Feature: Accessibility
     When I start the process
     And I wait for the data to be fetched
     And I visit /alterations for the process
-    Then the page should be accessible
-    And the page should have a descriptive title
-
-  Scenario: Loft page is accessible
-    When I start the process
-    And I wait for the data to be fetched
-    And I visit /loft for the process
     Then the page should be accessible
     And the page should have a descriptive title
 

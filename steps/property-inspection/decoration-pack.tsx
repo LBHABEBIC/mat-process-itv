@@ -1,10 +1,14 @@
-import { FieldsetLegend } from "lbh-frontend-react/components";
+import {
+  FieldsetLegend,
+  Heading,
+  HeadingLevels,
+} from "lbh-frontend-react/components";
 import React from "react";
 import {
   ComponentDatabaseMap,
-  ComponentValue,
   ComponentWrapper,
   DynamicComponent,
+  ComponentValue,
 } from "remultiform/component-wrapper";
 import { makeSubmit } from "../../components/makeSubmit";
 import {
@@ -16,41 +20,47 @@ import { ReviewNotes } from "../../components/ReviewNotes";
 import { getRadioLabelFromValue } from "../../helpers/getRadioLabelFromValue";
 import keyFromSlug from "../../helpers/keyFromSlug";
 import ProcessStepDefinition from "../../helpers/ProcessStepDefinition";
-import yesNoRadios from "../../helpers/yesNoRadios";
 import { Notes } from "../../storage/DatabaseSchema";
 import ProcessDatabaseSchema from "../../storage/ProcessDatabaseSchema";
 import PageSlugs from "../PageSlugs";
 import PageTitles from "../PageTitles";
 
+const decorationPackRadios = [
+  {
+    label: "Yes, pack delivered",
+    value: "yes pack",
+  },
+  {
+    label: "No, but property was decorated before tenant moved in",
+    value: "no but decorated",
+  },
+  {
+    label: "No, pack not delivered",
+    value: "not delivered",
+  },
+];
+
 const questions = {
-  "has-access-to-loft": "Does the tenant have access to loft space?",
-  "items-stored-in-loft": "Are items being stored in the loft space?",
+  "decoration-pack-delivered": "Has the decoration pack been delivered?",
 };
 
 const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
-  title: PageTitles.Loft,
-  heading: "Loft access",
+  title: PageTitles.DecorationPack,
+  heading: "Decoration pack",
   review: {
     rows: [
       {
-        label: questions["has-access-to-loft"],
+        label: questions["decoration-pack-delivered"],
         values: {
-          "has-access-to-loft": {
-            renderValue(hasAccess: string): React.ReactNode {
-              return getRadioLabelFromValue(yesNoRadios, hasAccess);
+          "decoration-pack-delivered": {
+            renderValue(isDecorationPack: string): React.ReactNode {
+              return getRadioLabelFromValue(
+                decorationPackRadios,
+                isDecorationPack
+              );
             },
           },
-        },
-      },
-      {
-        label: questions["items-stored-in-loft"],
-        values: {
-          "items-stored-in-loft": {
-            renderValue(storingItems: string): React.ReactNode {
-              return getRadioLabelFromValue(yesNoRadios, storingItems);
-            },
-          },
-          "loft-notes": {
+          "decoration-pack-notes": {
             renderValue(notes: Notes): React.ReactNode {
               if (notes.length === 0) {
                 return;
@@ -64,8 +74,8 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     ],
   },
   step: {
-    slug: PageSlugs.Loft,
-    nextSlug: PageSlugs.Garden,
+    slug: PageSlugs.DecorationPack,
+    nextSlug: PageSlugs.LaminatedFlooring,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
@@ -74,47 +84,18 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
     componentWrappers: [
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "has-access-to-loft",
+          key: "decoration-pack-delivered",
           Component: RadioButtons,
           props: {
-            name: "has-access-to-loft",
-            legend: (
-              <FieldsetLegend>{questions["has-access-to-loft"]}</FieldsetLegend>
-            ) as React.ReactNode,
-            radios: yesNoRadios,
-          },
-          defaultValue: "",
-          emptyValue: "",
-          databaseMap: new ComponentDatabaseMap<
-            ProcessDatabaseSchema,
-            "property"
-          >({
-            storeName: "property",
-            key: keyFromSlug(),
-            property: ["loft", "hasAccess"],
-          }),
-        })
-      ),
-      ComponentWrapper.wrapDynamic(
-        new DynamicComponent({
-          key: "items-stored-in-loft",
-          Component: RadioButtons,
-          props: {
-            name: "items-stored-in-loft",
+            name: "decoration-pack-delivered",
             legend: (
               <FieldsetLegend>
-                {questions["items-stored-in-loft"]}
+                <Heading level={HeadingLevels.H2}>
+                  {questions["decoration-pack-delivered"]}
+                </Heading>
               </FieldsetLegend>
             ) as React.ReactNode,
-            radios: yesNoRadios,
-          },
-          renderWhen(stepValues: {
-            "has-access-to-loft"?: ComponentValue<
-              ProcessDatabaseSchema,
-              "property"
-            >;
-          }): boolean {
-            return stepValues["has-access-to-loft"] === "yes";
+            radios: decorationPackRadios,
           },
           defaultValue: "",
           emptyValue: "",
@@ -124,27 +105,27 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["loft", "itemsStored"],
+            property: ["decorationPack", "hasDecorationPack"],
           }),
         })
       ),
       ComponentWrapper.wrapDynamic(
         new DynamicComponent({
-          key: "loft-notes",
+          key: "decoration-pack-notes",
           Component: PostVisitActionInput,
           props: {
             label: {
-              value: "Add note about loft space if necessary.",
+              value: "Add note if necessary.",
             },
-            name: "loft-notes",
+            name: "decoration-pack-notes",
           } as PostVisitActionInputProps,
           renderWhen(stepValues: {
-            "has-access-to-loft"?: ComponentValue<
+            "decoration-pack-delivered"?: ComponentValue<
               ProcessDatabaseSchema,
               "property"
             >;
           }): boolean {
-            return stepValues["has-access-to-loft"] === "yes";
+            return stepValues["decoration-pack-delivered"] === "not delivered";
           },
           defaultValue: [] as Notes,
           emptyValue: [] as Notes,
@@ -154,7 +135,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
           >({
             storeName: "property",
             key: keyFromSlug(),
-            property: ["loft", "notes"],
+            property: ["decorationPack", "notes"],
           }),
         })
       ),

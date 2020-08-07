@@ -85,7 +85,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
   },
   step: {
     slug: PageSlugs.Gas,
-    nextSlug: PageSlugs.LaminatedFlooring,
+    nextSlug: PageSlugs.DecorationPack,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,

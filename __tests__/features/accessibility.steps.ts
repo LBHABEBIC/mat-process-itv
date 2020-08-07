@@ -68,10 +68,10 @@ defineFeature(loadFeature("./accessibility.feature"), (test) => {
   testAccessibility(test, "Rooms");
   testAccessibility(test, "Property occupation");
   testAccessibility(test, "Gas");
+  testAccessibility(test, "Decoration pack");
   testAccessibility(test, "Laminated flooring");
   testAccessibility(test, "Structural changes");
   testAccessibility(test, "Damage");
-  testAccessibility(test, "Loft");
   testAccessibility(test, "Garden");
   testAccessibility(test, "Storing materials");
   testAccessibility(test, "Fire exit");

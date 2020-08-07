@@ -44,6 +44,10 @@ type ProcessDatabaseSchema = NamedSchema<
           };
           notes: Notes;
         };
+        decorationPack: {
+          hasDecorationPack: string;
+          notes: Notes;
+        };
         laminatedFlooring: {
           hasLaminatedFlooring: string;
           hasPermission: string;
@@ -59,11 +63,6 @@ type ProcessDatabaseSchema = NamedSchema<
           needsRepairs: string;
           images: string[];
           notes: string;
-        };
-        loft: {
-          hasAccess: string;
-          itemsStored: string;
-          notes: Notes;
         };
         garden: {
           hasGarden: string;
@@ -327,10 +326,10 @@ export const processNotesPaths: {
   property: [
     "propertyOccupied.notes",
     "gas.notes",
+    "decorationPack.notes",
     "laminatedFlooring.notes",
     "alterations.notes",
     "repairs.notes",
-    "loft.notes",
     "garden.notes",
     "storingMaterials.notes",
     "fireExit.notes",
@@ -389,6 +388,10 @@ export const processPostVisitActionMap: {
       category: "20",
       subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
     },
+    "decorationPack.notes": {
+      category: "20",
+      subcategory: "xxxxxxxx", // TODO: get correct subcategory value
+    },
     "laminatedFlooring.notes": {
       category: "20",
       subcategory: "100000184",
@@ -404,10 +407,6 @@ export const processPostVisitActionMap: {
     "repairs.notes": {
       category: "20",
       subcategory: "100000555",
-    },
-    "loft.notes": {
-      category: "20",
-      subcategory: "100000171",
     },
     "garden.notes": {
       category: "20",

@@ -46,6 +46,16 @@ const processData = {
         },
       ],
     },
+    decorationPack: {
+      hasDecorationPack: "yes",
+      hasPermission: "yes",
+      notes: [
+        {
+          value: "Decoration pack notes",
+          isPostVisitAction: false,
+        },
+      ],
+    },
     laminatedFlooring: {
       hasLaminatedFlooring: "yes",
       hasPermission: "yes",
@@ -63,16 +73,6 @@ const processData = {
       notes: [
         {
           value: "Alterations notes",
-          isPostVisitAction: false,
-        },
-      ],
-    },
-    loft: {
-      hasAccess: "yes",
-      itemsStored: "yes",
-      notes: [
-        {
-          value: "Loft notes",
           isPostVisitAction: false,
         },
       ],
@@ -931,6 +931,24 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
 
       await browser!.submit();
 
+      // Decoration pack page
+      await expect(browser!.getCurrentUrl()).resolves.toContain(
+        `${processRef}/decoration-pack`
+      );
+
+      (
+        await browser!.waitForEnabledElement({
+          id: `decoration-pack-delivered-${processData.property.decorationPack.hasDecorationPack}`,
+        })
+      ).click();
+      (
+        await browser!.waitForEnabledElement({
+          name: "decoration-pack-notes",
+        })
+      ).sendKeys(processData.property.decorationPack.notes[0].value);
+
+      await browser!.submit();
+
       // Laminated flooring page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
         `${processRef}/laminated-flooring`
@@ -985,29 +1003,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       // Damage page deleted
 
       // Roof page deleted
-
-      // Loft page
-      await expect(browser!.getCurrentUrl()).resolves.toContain(
-        `${processRef}/loft`
-      );
-
-      (
-        await browser!.waitForEnabledElement({
-          id: `has-access-to-loft-${processData.property.loft.hasAccess}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          id: `items-stored-in-loft-${processData.property.loft.itemsStored}`,
-        })
-      ).click();
-      (
-        await browser!.waitForEnabledElement({
-          name: "loft-notes",
-        })
-      ).sendKeys(processData.property.loft.notes[0].value);
-
-      await browser!.submit();
 
       // Garden page
       await expect(browser!.getCurrentUrl()).resolves.toContain(
@@ -1561,7 +1556,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Laminated flooring notes");
       await Expect.pageToContain("Alterations notes");
       await Expect.pageToContain("Damage notes");
-      await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
       await Expect.pageToContain("Storing materials notes");
       await Expect.pageToContain("Fire exit notes");
@@ -1620,7 +1614,6 @@ defineFeature(loadFeature("./end-to-end.feature"), (test) => {
       await Expect.pageToContain("Laminated flooring notes");
       await Expect.pageToContain("Structural changes notes");
       await Expect.pageToContain("Damage notes");
-      await Expect.pageToContain("Loft notes");
       await Expect.pageToContain("Garden notes");
       await Expect.pageToContain("Storing materials notes");
       await Expect.pageToContain("Fire exit notes");

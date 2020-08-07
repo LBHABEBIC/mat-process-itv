@@ -5,7 +5,6 @@ import fireExit from "./fire-exit";
 import garden from "./garden";
 import laminatedFlooring from "./laminated-flooring";
 import alterations from "./alterations";
-import loft from "./loft";
 import metalGates from "./metal-gates";
 import otherComments from "./other-comments";
 import pets from "./pets";
@@ -14,15 +13,16 @@ import smokeAlarm from "./smoke-alarm";
 import storingMaterials from "./storing-materials";
 import propertyOccupation from "./property-occupation";
 import gas from "./gas";
+import decorationPack from "./decoration-pack";
 import refuse from "./refuse";
 import queries from "./queries";
 
 export default [
   propertyOccupation,
   gas,
+  decorationPack,
   laminatedFlooring,
   alterations,
-  loft,
   garden,
   repairs,
   storingMaterials,
