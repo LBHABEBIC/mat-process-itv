@@ -134,13 +134,6 @@ Feature: Accessibility
     Then the page should be accessible
     And the page should have a descriptive title
 
-  Scenario: Roof page is accessible
-    When I start the process
-    And I wait for the data to be fetched
-    And I visit /roof for the process
-    Then the page should be accessible
-    And the page should have a descriptive title
-
   Scenario: Garden page is accessible
     When I start the process
     And I wait for the data to be fetched

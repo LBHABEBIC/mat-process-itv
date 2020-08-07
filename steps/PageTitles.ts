@@ -31,7 +31,6 @@ enum PageTitles {
   LaminatedFlooring = "Laminated flooring",
   Alterations = "Alterations",
   Damage = "Damage",
-  Roof = "Roof",
   Garden = "Garden",
   Repairs = "Repairs",
   StoringMaterials = "Storing materials",
