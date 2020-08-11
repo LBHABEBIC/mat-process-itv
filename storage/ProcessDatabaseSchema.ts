@@ -375,24 +375,24 @@ export const processPostVisitActionMap: {
   submitted: {},
   property: {
     "propertyOccupied.notes": {
-      category: "20",
-      subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
+      category: "8",
+      subcategory: "100000500",
     },
     "gas.notes": {
-      category: "20",
-      subcategory: "XXXXXXXXX", // TODO: get correct subcategory value
+      category: "26",
+      subcategory: "100000213",
     },
     "decorationPack.notes": {
       category: "20",
-      subcategory: "xxxxxxxx", // TODO: get correct subcategory value
+      subcategory: "100000666",
     },
     "laminatedFlooring.notes": {
       category: "20",
       subcategory: "100000184",
     },
     "alterations.notes": {
-      category: "20",
-      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+      category: "21",
+      subcategory: "100000003",
     },
     "damage.notes": {
       category: "20",
@@ -436,19 +436,19 @@ export const processPostVisitActionMap: {
     },
     "refuse.notes": {
       category: "23",
-      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+      subcategory: "100000237",
     },
     "bookletNotes.notes": {
-      category: "23",
-      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+      category: "27",
+      subcategory: "100000216",
     },
     "homeQueriesNotes.notes": {
-      category: "23",
-      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+      category: "27",
+      subcategory: "100000217",
     },
     "facilitiesQueriesNotes.notes": {
-      category: "23",
-      subcategory: "XXXXXXXX", // TODO: get correct subcategory value
+      category: "27",
+      subcategory: "100000218",
     },
     "otherComments.notes": {
       category: "20",
@@ -475,7 +475,7 @@ export const processPostVisitActionMap: {
     },
     "paymentCard.notes": {
       category: "17",
-      subcategory: "", //TODO add CRM subcat number
+      subcategory: "100000666",
     },
     "rentArrears.notes": {
       category: "17",
