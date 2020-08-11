@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,9 +19,22 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "lbh-frontend-react/*": ["./node_modules/lbh-frontend-react/dist/esm/*"],
-      "remultiform/*": ["./node_modules/remultiform/dist/esm/*"]
+      "lbh-frontend-react/*": [
+        "./node_modules/lbh-frontend-react/dist/esm/*"
+      ],
+      "remultiform/*": [
+        "./node_modules/remultiform/dist/esm/*"
+      ]
     }
   },
-  "exclude": ["**/node_modules/**/*", "__tests__/**/*", "server/**/*"]
+  "exclude": [
+    "**/node_modules/**/*",
+    "__tests__/**/*",
+    "server/**/*"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
