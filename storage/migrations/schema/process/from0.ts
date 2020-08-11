@@ -1,7 +1,9 @@
 import { Upgrade } from "remultiform/database";
 import ProcessDatabaseSchema from "../../../ProcessDatabaseSchema";
 
-export default (upgrade: Upgrade<ProcessDatabaseSchema["schema"]>): void => {
+const upgradeSchema = (
+  upgrade: Upgrade<ProcessDatabaseSchema["schema"]>
+): void => {
   upgrade.createStore("lastModified");
   upgrade.createStore("property");
   upgrade.createStore("isUnannouncedVisit");
@@ -11,3 +13,5 @@ export default (upgrade: Upgrade<ProcessDatabaseSchema["schema"]>): void => {
   upgrade.createStore("disability");
   upgrade.createStore("supportNeeds");
 };
+
+export default upgradeSchema;
