@@ -83,7 +83,7 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
   },
   step: {
     slug: PageSlugs.OtherSupport,
-    nextSlug: PageSlugs.Verify,
+    nextSlug: PageSlugs.Sections,
     submit: (nextSlug?: string): ReturnType<typeof makeSubmit> =>
       makeSubmit({
         slug: nextSlug as PageSlugs | undefined,
