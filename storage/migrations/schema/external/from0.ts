@@ -6,5 +6,6 @@ const upgradeSchema = (
 ): void => {
   upgrade.createStore("tenancy");
   upgrade.createStore("residents");
+  upgrade.createStore("officer");
 };
 export default upgradeSchema;

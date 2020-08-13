@@ -9,5 +9,8 @@ const upgradeSchema = (
   upgrade.createStore("photo");
   upgrade.createStore("nextOfKin");
   upgrade.createStore("carer");
+  upgrade.createStore("signature");
+  upgrade.createStore("otherSupport");
+  upgrade.createStore("disabilities");
 };
 export default upgradeSchema;
