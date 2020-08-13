@@ -15,7 +15,7 @@ const upgradeSchema = (
   upgrade.createStore("tenantsPresent");
   upgrade.createStore("submitted");
   upgrade.createStore("unableToEnter");
-  upgrade.createStore("managerComment");
+  upgrade.createStore("managerComments");
   upgrade.createStore("other");
 };
 

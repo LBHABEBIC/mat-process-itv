@@ -7,7 +7,7 @@ import {
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Notes } from "storage/DatabaseSchema";
 import ManagerSubmitButton from "../../../components/ManagerSubmitButton";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
@@ -47,6 +47,31 @@ const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
   const processDatabase = useDatabase(Storage.ProcessContext);
+
+  const managerComments = useDataValue(
+    Storage.ProcessContext,
+    "managerComments",
+    processRef,
+    (values) => (processRef ? values[processRef] : undefined)
+  );
+
+  const [managerComment, setManagerComment] = useState<string>("");
+
+  useEffect(() => {
+    if (managerComments.result !== undefined) {
+      setManagerComment(managerComments.result.managerReview);
+    }
+  }, [managerComments.result]);
+
+  const comments = Object.assign(
+    {
+      managerReview: "",
+    },
+    managerComments.result,
+    {
+      managerReview: managerComment,
+    }
+  );
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -118,8 +143,6 @@ const ReviewPage: NextPage = () => {
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-
-  const [managerComment, setManagerComment] = useState("");
 
   const visitType = isUnannouncedVisit.result
     ? getManagerSummaryText(
@@ -235,7 +258,7 @@ const ReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
+      <Paragraph>Date of submission: {submittedDateValue}</Paragraph>
       {tenantsPresent.map(
         ({ fullName, id }) =>
           signatureValues[id] && (
@@ -270,9 +293,9 @@ const ReviewPage: NextPage = () => {
           await approveProcess(router);
 
           await processDatabase.result.put(
-            "managerComment",
+            "managerComments",
             processRef,
-            managerComment
+            comments
           );
           return true;
         }}
@@ -288,9 +311,9 @@ const ReviewPage: NextPage = () => {
           await declineProcess(router);
 
           await processDatabase.result.put(
-            "managerComment",
+            "managerComments",
             processRef,
-            managerComment
+            comments
           );
 
           return true;
