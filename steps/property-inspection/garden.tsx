@@ -112,7 +112,7 @@ const step: ProcessStepDefinition<ProcessDatabaseSchema, "property"> = {
             name: "has-garden",
             legend: (
               <FieldsetLegend>
-                <Heading level={HeadingLevels.H2}>
+                <Heading level={HeadingLevels.H3}>
                   {questions["has-garden"]}
                 </Heading>
               </FieldsetLegend>

@@ -97,7 +97,11 @@ const step: ProcessStepDefinition<ResidentDatabaseSchema, "otherSupport"> = {
           props: {
             name: "gp-signed-up",
             legend: (
-              <FieldsetLegend>{questions["gp-signed-up"]}</FieldsetLegend>
+              <FieldsetLegend>
+                <Heading level={HeadingLevels.H3}>
+                  {questions["gp-signed-up"]}
+                </Heading>
+              </FieldsetLegend>
             ) as React.ReactNode,
             radios: yesNoRadios,
           },
