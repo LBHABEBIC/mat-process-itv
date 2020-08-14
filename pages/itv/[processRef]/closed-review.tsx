@@ -3,13 +3,13 @@ import {
   Heading,
   HeadingLevels,
   Paragraph,
-  Textarea,
+  PageAnnouncement,
+  Button,
 } from "lbh-frontend-react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Notes } from "storage/DatabaseSchema";
-import { makeSubmit } from "../../../components/makeSubmit";
 import { HouseholdReviewSection } from "../../../components/review-sections/HouseholdReviewSection";
 import { IdAndResidencyReviewSection } from "../../../components/review-sections/IdAndResidencyReviewSection";
 import { PropertyInspectionReviewSection } from "../../../components/review-sections/PropertyInspectionReviewSection";
@@ -20,11 +20,8 @@ import getProcessRef from "../../../helpers/getProcessRef";
 import useDataSet from "../../../helpers/useDataSet";
 import useDataValue from "../../../helpers/useDataValue";
 import MainLayout from "../../../layouts/MainLayout";
-import PageSlugs from "../../../steps/PageSlugs";
 import PageTitles from "../../../steps/PageTitles";
 import Storage from "../../../storage/Storage";
-import useDatabase from "helpers/useDatabase";
-import isManager from "helpers/isManager";
 
 const getSummaryText = (
   yesValue: string,
@@ -43,22 +40,13 @@ const getSummaryText = (
 const ReviewPage: NextPage = () => {
   const router = useRouter();
   const processRef = getProcessRef(router);
-  const processDatabase = useDatabase(Storage.ProcessContext);
-  const isInManagerStage = isManager(router);
 
-  const managerComment = useDataValue(
+  const managerComments = useDataValue(
     Storage.ProcessContext,
-    "managerComment",
+    "managerComments",
     processRef,
     (values) => (processRef ? values[processRef] : undefined)
   );
-
-  const [managerCommentState, setManagerCommentState] = useState("");
-  useEffect(() => {
-    if (managerComment.result !== undefined) {
-      setManagerCommentState(managerComment.result);
-    }
-  }, [managerComment.result]);
 
   const tenants = useDataValue(
     Storage.ExternalContext,
@@ -205,11 +193,6 @@ const ReviewPage: NextPage = () => {
     },
   ].filter(({ value }) => value.length > 0);
 
-  const SubmitButton = makeSubmit({
-    slug: PageSlugs.Pause,
-    value: "Exit process",
-  });
-
   return (
     <MainLayout
       title={PageTitles.ClosedReview}
@@ -224,6 +207,13 @@ const ReviewPage: NextPage = () => {
         }}
         extraRows={extraRows}
       />
+
+      {managerComments.result?.managerReview && (
+        <PageAnnouncement title="Manager comment">
+          {managerComments.result?.managerReview}
+        </PageAnnouncement>
+      )}
+
       <IdAndResidencyReviewSection
         tenants={tenantsWithPresentStatus}
         readOnly
@@ -246,7 +236,7 @@ const ReviewPage: NextPage = () => {
         may amount to fraud and would put my tenancy at risk with the result
         that I may lose my home.
       </Paragraph>
-      <Paragraph>Date of visit: {submittedDateValue}</Paragraph>
+      <Paragraph>Date of submission: {submittedDateValue}</Paragraph>
       {tenantsPresent.map(
         ({ fullName, id }) =>
           signatureValues[id] && (
@@ -260,41 +250,15 @@ const ReviewPage: NextPage = () => {
             </React.Fragment>
           )
       )}
-      {isInManagerStage && (
-        <Textarea
-          name="manager-comment"
-          label={{
-            children: (
-              <Heading level={HeadingLevels.H2}>Manager&apos;s comment</Heading>
-            ),
-          }}
-          value={managerCommentState}
-          rows={4}
-          onChange={(value): void => setManagerCommentState(value)}
-        />
-      )}
-      <SubmitButton
-        onSubmit={async (): Promise<boolean> => {
-          if (!processRef || !processDatabase.result) {
-            return false;
+      <Button
+        onClick={(): void => {
+          if (process.env.WORKTRAY_URL) {
+            location.assign(process.env.WORKTRAY_URL);
           }
-
-          if (isInManagerStage) {
-            // FIXME: This will overwrite the existing "managerComment" if there is one
-            await processDatabase.result.put(
-              "managerComment",
-              processRef,
-              managerCommentState
-            );
-          }
-          await processDatabase.result.put(
-            "submitted",
-            processRef,
-            new Date().toISOString()
-          );
-          return true;
         }}
-      />
+      >
+        Exit process
+      </Button>
       <style jsx>{`
         .mat-tenancy-summary img {
           margin-right: 2em;

@@ -51,11 +51,6 @@ export const VerifyPage: NextPage = () => {
   const tenantIds = tenants.map((tenant) => tenant.id);
 
   const idData = useDataSet(Storage.ResidentContext, "id", tenantIds);
-  const residencyData = useDataSet(
-    Storage.ResidentContext,
-    "residency",
-    tenantIds
-  );
 
   const tenantData = tenants.map((tenant) => ({
     id: tenant.id,
@@ -70,18 +65,12 @@ export const VerifyPage: NextPage = () => {
           : tenantsPresent.result?.includes(tenant.id)
           ? false
           : undefined,
-      residency: residencyData.result
-        ? Boolean(residencyData.result[tenant.id])
-        : false,
     },
   }));
 
   const allVerified =
     !residentData.loading &&
-    tenantData.every(
-      (tenant) =>
-        tenant.verified.id !== false && tenant.verified.residency !== false
-    );
+    tenantData.every((tenant) => tenant.verified.id !== false);
 
   const tableRows = tenantData.map((tenant) => {
     return [
@@ -94,13 +83,6 @@ export const VerifyPage: NextPage = () => {
         : tenant.verified.id === false
         ? "Unverified"
         : "-",
-      tenantsPresent.loading
-        ? "Loading..."
-        : tenant.verified.residency
-        ? "Verified"
-        : tenant.verified.residency === false
-        ? "Unverified"
-        : "-",
       <Link
         key="verify-link"
         href={
@@ -109,7 +91,7 @@ export const VerifyPage: NextPage = () => {
       >
         {tenantsPresent.loading
           ? "Loading..."
-          : tenant.verified.id !== false && tenant.verified.residency !== false
+          : tenant.verified.id !== false
           ? "Edit"
           : "Verify"}
       </Link>,
@@ -170,7 +152,7 @@ export const VerifyPage: NextPage = () => {
       <Heading level={HeadingLevels.H2}>Select a tenant to check</Heading>
 
       <Table
-        headings={["Tenant", "Date of birth", "ID", "Residency", "Action"]}
+        headings={["Tenant", "Date of birth", "ID", "Action"]}
         rows={tableRows}
       />
 
