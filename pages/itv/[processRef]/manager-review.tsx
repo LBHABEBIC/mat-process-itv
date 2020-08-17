@@ -146,10 +146,10 @@ const ReviewPage: NextPage = () => {
 
   const visitType = isUnannouncedVisit.result
     ? getManagerSummaryText(
-        "Unannounced",
-        "Announced",
-        isUnannouncedVisit.result
-      )
+      "Unannounced",
+      "Announced",
+      isUnannouncedVisit.result
+    )
     : "Loading...";
 
   const isVisitInside = useDataValue(
@@ -199,12 +199,12 @@ const ReviewPage: NextPage = () => {
 
   const outsidePropertyImageThumbnails = outsidePropertyImages.result
     ? outsidePropertyImages.result.images.map((image) => (
-        <Thumbnail
-          key={image}
-          src={image}
-          alt={"Thumbnail of an uploaded image"}
-        />
-      ))
+      <Thumbnail
+        key={image}
+        src={image}
+        alt={"Thumbnail of an uploaded image"}
+      />
+    ))
     : [];
 
   const extraRows = [
@@ -225,7 +225,7 @@ const ReviewPage: NextPage = () => {
   return (
     <MainLayout
       title={PageTitles.ManagerReview}
-      heading="Review Tenancy and Household Check"
+      heading="Review Introductory Tenancy Visit"
     >
       <TenancySummary
         details={{
@@ -290,7 +290,7 @@ const ReviewPage: NextPage = () => {
             return false;
           }
 
-          await approveProcess(router);
+          // await approveProcess(router);
 
           await processDatabase.result.put(
             "managerComments",
