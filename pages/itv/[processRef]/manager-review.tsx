@@ -225,7 +225,7 @@ const ReviewPage: NextPage = () => {
   return (
     <MainLayout
       title={PageTitles.ManagerReview}
-      heading="Review Tenancy and Household Check"
+      heading="Review Introductory Tenancy Visit"
     >
       <TenancySummary
         details={{
