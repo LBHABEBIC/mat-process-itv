@@ -19,17 +19,25 @@ export const TextInput: React.FunctionComponent<TextInputProps> = (props) => {
   const inputId = `${name}-input`;
 
   return (
-    <Input
-      id={inputId}
-      name={name}
-      label={{ id: labelId, children: label }}
-      type={InputType.Text}
-      value={value}
-      required={required}
-      disabled={disabled}
-      onChange={onValueChange}
-      aria-labelledby={labelId}
-    />
+    <>
+      <Input
+        id={inputId}
+        name={name}
+        label={{ id: labelId, children: label }}
+        type={InputType.Text}
+        value={value}
+        required={required}
+        disabled={disabled}
+        onChange={onValueChange}
+        aria-labelledby={labelId}
+      />
+
+      <style jsx>{`
+        :global(.govuk-input.lbh-input) {
+          margin-bottom: 20px;
+        }
+      `}</style>
+    </>
   );
 };
 
